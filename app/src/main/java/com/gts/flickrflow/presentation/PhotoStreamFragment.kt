@@ -99,8 +99,8 @@ class PhotoStreamFragment : Fragment() {
                     requestPermissions()
                 } else {
                     locationService?.requestLocationUpdates()
-                    buttonStart.text = getString(R.string.button_text_stop)
                 }
+                buttonStart.text = getString(R.string.button_text_stop)
             }
         }
 
