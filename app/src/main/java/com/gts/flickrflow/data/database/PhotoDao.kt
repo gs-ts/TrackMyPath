@@ -12,4 +12,7 @@ interface PhotoDao {
 
     @Query("SELECT * FROM photos WHERE id = :photoId LIMIT 1")
     suspend fun selectPhotoById(photoId: String): PhotoEntity?
+
+    @Query("DELETE FROM photos")
+    suspend fun deletePhotos()
 }

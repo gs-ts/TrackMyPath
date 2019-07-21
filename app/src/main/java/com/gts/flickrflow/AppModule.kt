@@ -20,6 +20,8 @@ import com.gts.flickrflow.data.database.PhotoDatabase
 import com.gts.flickrflow.data.network.FlickrApi
 import com.gts.flickrflow.data.network.PhotoRepository
 import com.gts.flickrflow.data.network.PhotoRepositoryImpl
+import com.gts.flickrflow.domain.DeletePhotosUseCase
+import com.gts.flickrflow.domain.SearchByLocationUseCase
 import com.gts.flickrflow.presentation.PhotoStreamViewModel
 
 val appModule = module {
@@ -29,7 +31,9 @@ val appModule = module {
     single<PhotoRepository> {
         PhotoRepositoryImpl(flickrApi = get(), photoDao = get())
     }
-    viewModel { PhotoStreamViewModel(photoRepository = get()) }
+    single { SearchByLocationUseCase(photoRepository = get()) }
+    single { DeletePhotosUseCase(photoRepository = get()) }
+    viewModel { PhotoStreamViewModel(searchByLocationUseCase = get(), deletePhotosUseCase = get()) }
 }
 
 private val okHttpClient = OkHttpClient.Builder()

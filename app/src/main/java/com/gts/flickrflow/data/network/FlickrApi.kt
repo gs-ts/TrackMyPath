@@ -19,8 +19,8 @@ interface FlickrApi {
     ): Deferred<Response<PhotosResponse>>
 
     companion object {
-        private const val ENDPOINT = "https://www.flickr.com/services/rest/"
         const val API_KEY = "58cace78ed8d64e8490e5e3341a96930"
+        private const val ENDPOINT = "https://www.flickr.com/services/rest/"
         private const val METHOD_PHOTOS_SEARCH = "?method=flickr.photos.search"
         private const val EXTRA_PARAMS = "&nojsoncallback=1&format=json"
         private const val EXTRA_SMALL_URL = "url_s"

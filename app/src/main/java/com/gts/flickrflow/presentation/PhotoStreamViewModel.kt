@@ -4,28 +4,37 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gts.flickrflow.data.network.PhotoRepository
+
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+
 import com.gts.flickrflow.core.Result
 import com.gts.flickrflow.domain.model.Photo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.gts.flickrflow.domain.DeletePhotosUseCase
+import com.gts.flickrflow.domain.SearchByLocationUseCase
 
-class PhotoStreamViewModel(private val photoRepository: PhotoRepository) : ViewModel() {
+class PhotoStreamViewModel(
+    private val searchByLocationUseCase: SearchByLocationUseCase,
+    private val deletePhotosUseCase: DeletePhotosUseCase
+) : ViewModel() {
 
     private val _photo = MutableLiveData<Photo>()
     val photo: LiveData<Photo>
         get() = _photo
 
-    fun startPhotoStreamBasedOnLocation() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = photoRepository.searchByLocation("38.319859", "23.322901")
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is Result.Success -> _photo.postValue(result.data)
-                    is Result.Error -> throw result.exception
-                }
+    fun getPhotoBasedOnLocation(lat: String, lon: String) {
+        viewModelScope.launch(Dispatchers.Main) {
+            val result = searchByLocationUseCase.invoke(lat, lon)
+            when (result) {
+                is Result.Success -> _photo.postValue(result.data)
+                is Result.Error -> throw result.exception
             }
+        }
+    }
+
+    fun stopPhotoStream() {
+        viewModelScope.launch {
+            deletePhotosUseCase.invoke()
         }
     }
 }

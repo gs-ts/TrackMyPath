@@ -15,9 +15,9 @@ buildscript {
         coroutines_version = '1.2.0'
         retrofit_version = '2.6.0'
         retrofitCoroutinesAdapter_version = '0.9.2'
-        okHttp_version = '3.9.0'
+        okHttp_version = '4.0.1'
         moshi_version = '1.8.0'
-        moshiConverter_version = '2.5.0'
+        moshiConverter_version = '2.6.0'
         fresco_version = '2.0.0'
         timber_version = '4.7.1'
     }
@@ -27,7 +27,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

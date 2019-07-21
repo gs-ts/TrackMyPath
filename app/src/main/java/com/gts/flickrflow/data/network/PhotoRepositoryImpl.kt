@@ -23,16 +23,24 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
                     photoDao.insert(data.photos.list[0].toPhotoEntity())
                     return Result.Success(data.photos.list[0].toPhoto())
                 } else {
-                    Timber.e("searchByLocation error")
-                    Result.Error(IOException("searchByLocation error"))
+                    Timber.e("searchByLocation data error")
+                    Result.Error(IOException("searchByLocation data error"))
                 }
             } else {
-                Timber.e("searchByLocation error")
-                Result.Error(IOException("searchByLocation error"))
+                Timber.e("searchByLocation response error")
+                Result.Error(IOException("searchByLocation response error"))
             }
         } catch (e: Exception) {
-            Timber.e(e, "searchByLocation error")
-            Result.Error(IOException("searchByLocation error", e))
+            Timber.e(e, "searchByLocation exception")
+            Result.Error(IOException("searchByLocation exception", e))
+        }
+    }
+
+    override suspend fun deletePhotos() {
+        try {
+            photoDao.deletePhotos()
+        } catch (e: Exception) {
+            Timber.e(e, "deletePhotos exception")
         }
     }
 }

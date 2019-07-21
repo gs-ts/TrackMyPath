@@ -3,7 +3,6 @@ package com.gts.flickrflow.data.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ColumnInfo
-import com.gts.flickrflow.data.model.PhotoResponse
 
 @Entity(tableName = "photos")
 class PhotoEntity(

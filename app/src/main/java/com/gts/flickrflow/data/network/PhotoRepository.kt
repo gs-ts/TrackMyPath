@@ -6,4 +6,6 @@ import com.gts.flickrflow.domain.model.Photo
 interface PhotoRepository {
 
     suspend fun searchByLocation(lat: String, lon: String): Result<Photo>
+
+    suspend fun deletePhotos()
 }
