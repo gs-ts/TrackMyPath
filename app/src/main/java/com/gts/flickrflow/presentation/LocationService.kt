@@ -203,16 +203,6 @@ class LocationService : Service() {
             }
         }
 
-//        scope.launch {
-//            searchByLocationTask.await()
-//            // Notify anyone listening for broadcasts about the new location.
-//            val intent = Intent(ACTION_BROADCAST)
-//            intent.putExtra(EXTRA_LOCATION, location)
-//            Timber.i(" LocationService ready to send broadcast!")
-//            LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-//            Timber.i(" LocationService broadcast sent!")
-//        }
-
         // Update notification content if running as a foreground service.
         if (serviceIsRunningInForeground(this)) {
             notificationManager.notify(NOTIFICATION_ID, getNotification())
