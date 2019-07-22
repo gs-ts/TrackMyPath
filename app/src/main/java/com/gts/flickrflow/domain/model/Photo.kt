@@ -1,9 +1,11 @@
 package com.gts.flickrflow.domain.model
 
 import android.os.Parcelable
-import com.gts.flickrflow.data.database.PhotoEntity
-import com.gts.flickrflow.data.model.PhotoResponse
+
 import kotlinx.android.parcel.Parcelize
+
+import com.gts.flickrflow.data.model.PhotoResponse
+import com.gts.flickrflow.data.database.PhotoEntity
 
 @Parcelize
 data class Photo(

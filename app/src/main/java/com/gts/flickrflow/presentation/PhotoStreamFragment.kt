@@ -2,30 +2,32 @@ package com.gts.flickrflow.presentation
 
 import android.Manifest
 import android.content.*
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
-import android.preference.PreferenceManager
-import android.provider.Settings
+import android.widget.Toast
 import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-
+import android.provider.Settings
+import android.content.pm.PackageManager
+import android.preference.PreferenceManager
 import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+
 import com.google.android.material.snackbar.Snackbar
-import com.gts.flickrflow.BuildConfig
+
+import kotlinx.android.synthetic.main.fragment_photo_stream.*
 
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.gts.flickrflow.R
+import com.gts.flickrflow.BuildConfig
 import com.gts.flickrflow.domain.model.Photo
-import kotlinx.android.synthetic.main.fragment_photo_stream.*
+
 import timber.log.Timber
 
 class PhotoStreamFragment : Fragment() {
