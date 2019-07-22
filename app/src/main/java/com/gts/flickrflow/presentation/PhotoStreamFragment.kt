@@ -3,7 +3,6 @@ package com.gts.flickrflow.presentation
 import android.Manifest
 import android.content.*
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
@@ -25,7 +24,7 @@ import com.gts.flickrflow.BuildConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.gts.flickrflow.R
-import com.gts.flickrflow.data.location.LocationService
+import com.gts.flickrflow.domain.model.Photo
 import kotlinx.android.synthetic.main.fragment_photo_stream.*
 import timber.log.Timber
 
@@ -88,10 +87,9 @@ class PhotoStreamFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        buttonStart.text = PreferenceManager.getDefaultSharedPreferences(context).getString("SERVICE_STATE", "Start")
+        buttonStart.text = PreferenceManager.getDefaultSharedPreferences(context).getString(getString(R.string.service_state), "Start")
         buttonStart.setOnClickListener {
             if (buttonStart.text == getString(R.string.button_text_stop)) {
-                viewModel.stopPhotoStream()
                 locationService?.removeLocationUpdates()
                 buttonStart.text = getString(R.string.button_text_start)
             } else {
@@ -216,11 +214,11 @@ class PhotoStreamFragment : Fragment() {
      */
     private inner class LocationReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val location = intent.getParcelableExtra<Location>(LocationService.EXTRA_LOCATION)
-            if (location != null) {
-                Timber.i(" LocationService broadcast received!")
+            val photo = intent.getParcelableExtra<Photo>(LocationService.EXTRA_PHOTO)
+            if (photo != null) {
+                Timber.i(" Photo broadcast received!")
                 //viewModel.getPhotoBasedOnLocation(location.latitude.toString(), location.longitude.toString())
-                val loctext = "(" + location.latitude + ", " + location.longitude + ")"
+                val loctext = "(" + photo.id + ", " + photo.farm + ")"
                 Toast.makeText(context, loctext, Toast.LENGTH_SHORT).show()
             }
         }

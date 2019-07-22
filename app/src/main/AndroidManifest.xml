@@ -17,7 +17,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <service
-                android:name=".data.location.LocationService"
+                android:name=".presentation.LocationService"
                 android:enabled="true"
                 android:exported="false">
         </service>

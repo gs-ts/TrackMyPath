@@ -1,4 +1,4 @@
-package com.gts.flickrflow.data.location
+package com.gts.flickrflow.presentation
 
 import android.os.Build
 import android.os.Binder
@@ -31,7 +31,7 @@ import org.koin.android.ext.android.inject
 
 import com.gts.flickrflow.R
 import com.gts.flickrflow.core.Result
-import com.gts.flickrflow.presentation.MainActivity
+import com.gts.flickrflow.domain.EmptyPhotosDbUseCase
 import com.gts.flickrflow.domain.SearchByLocationUseCase
 
 import timber.log.Timber
@@ -58,6 +58,7 @@ class LocationService : Service() {
     private lateinit var notificationManager: NotificationManager
 
     private val searchByLocationUseCase: SearchByLocationUseCase by inject()
+    private val emptyPhotosDbUseCase: EmptyPhotosDbUseCase by inject()
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
@@ -159,6 +160,9 @@ class LocationService : Service() {
         try {
             saveServiceState(getString(R.string.service_state_stopped))
             fusedLocationClient.removeLocationUpdates(locationCallback)
+            scope.launch {
+                emptyPhotosDbUseCase.invoke()
+            }
             stopSelf()
         } catch (unlikely: SecurityException) {
             saveServiceState(getString(R.string.service_state_started))
@@ -184,23 +188,30 @@ class LocationService : Service() {
         Timber.tag(TAG).i("New location: $location")
         this.location = location
 
-        val searchByLocationTask = scope.async {
+        scope.launch {
             val result = searchByLocationUseCase.invoke(location.latitude.toString(), location.longitude.toString())
             when (result) {
-                is Result.Success -> Timber.i(" LocationService success!")
+                is Result.Success -> {
+                    Timber.i(" LocationService success!")
+                    // Notify anyone listening for broadcasts about the new photo.
+                    val intent = Intent(ACTION_BROADCAST)
+                    intent.putExtra(EXTRA_PHOTO, result.data)
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                    Timber.i(" Photo broadcast sent!")
+                }
                 is Result.Error -> Timber.i(" LocationService error!")
             }
         }
-        runBlocking {
-            searchByLocationTask.await()
-        }
 
-        // Notify anyone listening for broadcasts about the new location.
-        val intent = Intent(ACTION_BROADCAST)
-        intent.putExtra(EXTRA_LOCATION, location)
-        Timber.i(" LocationService ready to send broadcast!")
-        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-        Timber.i(" LocationService broadcast sent!")
+//        scope.launch {
+//            searchByLocationTask.await()
+//            // Notify anyone listening for broadcasts about the new location.
+//            val intent = Intent(ACTION_BROADCAST)
+//            intent.putExtra(EXTRA_LOCATION, location)
+//            Timber.i(" LocationService ready to send broadcast!")
+//            LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+//            Timber.i(" LocationService broadcast sent!")
+//        }
 
         // Update notification content if running as a foreground service.
         if (serviceIsRunningInForeground(this)) {
@@ -291,7 +302,7 @@ class LocationService : Service() {
     }
 
     companion object {
-        const val EXTRA_LOCATION = "location"
+        const val EXTRA_PHOTO = "location"
         const val ACTION_BROADCAST = "broadcast"
     }
 }
