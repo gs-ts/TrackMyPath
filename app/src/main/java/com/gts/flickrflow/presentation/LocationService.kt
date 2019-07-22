@@ -146,6 +146,9 @@ class LocationService : Service() {
             fusedLocationClient.requestLocationUpdates(
                 locationRequest, locationCallback, Looper.myLooper()
             )
+            scope.launch {
+                emptyPhotosDbUseCase.invoke()
+            }
         } catch (unlikely: SecurityException) {
             saveServiceState(getString(R.string.service_state_stopped))
             Timber.tag(TAG).e("Lost location permission. Could not request updates. $unlikely")
@@ -160,9 +163,6 @@ class LocationService : Service() {
         try {
             saveServiceState(getString(R.string.service_state_stopped))
             fusedLocationClient.removeLocationUpdates(locationCallback)
-            scope.launch {
-                emptyPhotosDbUseCase.invoke()
-            }
             stopSelf()
         } catch (unlikely: SecurityException) {
             saveServiceState(getString(R.string.service_state_started))

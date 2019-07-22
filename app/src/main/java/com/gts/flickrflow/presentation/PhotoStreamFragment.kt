@@ -63,9 +63,10 @@ class PhotoStreamFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.photo.observe(viewLifecycleOwner, Observer { photo ->
+        viewModel.retrievePhotosFromDb()
+        viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
             //            my_image_view.setImageURI("https://farm${it.farm}.staticflickr.com/${it.server}/${it.id}_${it.secret}.jpg")
-            Toast.makeText(context, "photo id: " + photo.id, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "photos size: " + photos.size, Toast.LENGTH_SHORT).show()
         })
     }
 

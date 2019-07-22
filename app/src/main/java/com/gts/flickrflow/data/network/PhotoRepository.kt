@@ -7,5 +7,7 @@ interface PhotoRepository {
 
     suspend fun searchByLocation(lat: String, lon: String): Result<Photo>
 
+    suspend fun loadAllPhotos(): Result<List<Photo>>
+
     suspend fun deletePhotos()
 }

@@ -10,8 +10,8 @@ interface PhotoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(photo: PhotoEntity)
 
-    @Query("SELECT * FROM photos WHERE id = :photoId LIMIT 1")
-    suspend fun selectPhotoById(photoId: String): PhotoEntity?
+    @Query("SELECT * FROM photos")
+    fun loadAllPhotos(): Array<PhotoEntity>
 
     @Query("DELETE FROM photos")
     suspend fun deletePhotos()

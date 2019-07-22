@@ -36,6 +36,17 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
         }
     }
 
+    override suspend fun loadAllPhotos(): Result<List<Photo>> {
+        val photos = photoDao.loadAllPhotos()
+        if (photos.isNotEmpty()) {
+            val result = photos.map { it.toPhoto() }
+            return Result.Success(result)
+        } else {
+            return Result.Error(Exception("Empty photos"))
+        }
+
+    }
+
     override suspend fun deletePhotos() {
         try {
             photoDao.deletePhotos()
