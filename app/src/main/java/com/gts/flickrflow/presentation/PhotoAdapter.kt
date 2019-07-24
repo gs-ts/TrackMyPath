@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.view.SimpleDraweeView
 
 import com.gts.flickrflow.R
-import com.gts.flickrflow.core.buildUri
 import com.gts.flickrflow.domain.model.Photo
 
 class PhotoAdapter(private val photos: MutableList<Photo>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
@@ -19,8 +18,13 @@ class PhotoAdapter(private val photos: MutableList<Photo>) : RecyclerView.Adapte
         notifyItemInserted(0)
     }
 
-    fun populatePhotoAdapter(photosFromDb: List<Photo>) {
+    fun populate(photosFromDb: List<Photo>) {
         photos.addAll(photosFromDb)
+        notifyDataSetChanged()
+    }
+
+    fun resetPhotoList() {
+        photos.clear()
         notifyDataSetChanged()
     }
 
@@ -31,7 +35,14 @@ class PhotoAdapter(private val photos: MutableList<Photo>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val photo = photos[position]
-        holder.photoImageView.setImageURI(buildUri(photo.farm, photo.server, photo.id, photo.secret))
+        holder.photoImageView.setImageURI(
+            buildUri(
+                photo.farm,
+                photo.server,
+                photo.id,
+                photo.secret
+            )
+        )
     }
 
     override fun getItemCount(): Int = photos.size

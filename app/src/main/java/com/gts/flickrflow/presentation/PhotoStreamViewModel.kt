@@ -17,16 +17,16 @@ class PhotoStreamViewModel(
     private val retrievePhotosFromDbUseCase: RetrievePhotosFromDbUseCase
 ) : ViewModel() {
 
-    private val _photos = MutableLiveData<List<Photo>>()
-    val photos: LiveData<List<Photo>>
-        get() = _photos
+    private val _photosFromDb = MutableLiveData<List<Photo>>()
+    val photosFromDb: LiveData<List<Photo>>
+        get() = _photosFromDb
 
     fun retrievePhotosFromDb() {
         viewModelScope.launch {
             val result = retrievePhotosFromDbUseCase.invoke()
             when (result) {
                 is Result.Success -> {
-                    _photos.postValue(result.data)
+                    _photosFromDb.postValue(result.data)
                 }
                 is Result.Error -> Timber.d("no photos")
             }

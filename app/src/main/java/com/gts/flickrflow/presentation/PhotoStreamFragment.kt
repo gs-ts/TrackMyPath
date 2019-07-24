@@ -50,6 +50,21 @@ class PhotoStreamFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var photoAdapter: PhotoAdapter
 
+    // Monitors the state of the connection to the service.
+    private val serviceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            val binder = service as LocationService.LocalBinder
+            locationService = binder.service
+            serviceBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            locationService = null
+            serviceBound = false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,8 +81,8 @@ class PhotoStreamFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.retrievePhotosFromDb()
-        viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
-            photoAdapter.populatePhotoAdapter(photos)
+        viewModel.photosFromDb.observe(viewLifecycleOwner, Observer { photos ->
+            photoAdapter.populate(photos)
             recyclerView.smoothScrollToPosition(0)
             Toast.makeText(context, "photos size: " + photos.size, Toast.LENGTH_SHORT).show()
         })
@@ -81,21 +96,6 @@ class PhotoStreamFragment : Fragment() {
         photoAdapter = PhotoAdapter(photoList)
         recyclerView.adapter = photoAdapter
         recyclerView.isNestedScrollingEnabled = false
-    }
-
-    // Monitors the state of the connection to the service.
-    private val serviceConnection = object : ServiceConnection {
-
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            val binder = service as LocationService.LocalBinder
-            locationService = binder.service
-            serviceBound = true
-        }
-
-        override fun onServiceDisconnected(name: ComponentName) {
-            locationService = null
-            serviceBound = false
-        }
     }
 
     override fun onStart() {
@@ -112,6 +112,7 @@ class PhotoStreamFragment : Fragment() {
                 } else {
                     locationService?.requestLocationUpdates()
                 }
+                photoAdapter.resetPhotoList()
                 buttonStart.text = getString(R.string.button_text_stop)
             }
         }
