@@ -1,32 +1,42 @@
 package com.gts.flickrflow.presentation
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.view.LayoutInflater
+import androidx.recyclerview.widget.RecyclerView
 
+import com.facebook.drawee.view.SimpleDraweeView
 
-class PhotoAdapter : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+import com.gts.flickrflow.R
+import com.gts.flickrflow.core.buildUri
+import com.gts.flickrflow.domain.model.Photo
+
+class PhotoAdapter(private val photos: MutableList<Photo>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+
+    fun addPhoto(photo: Photo) {
+        // Add the photo at the beggining of the list
+        photos.add(0, photo)
+        notifyItemInserted(0)
+    }
+
+    fun populatePhotoAdapter(photosFromDb: List<Photo>) {
+        photos.addAll(photosFromDb)
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): PhotoViewHolder {
+        val v = LayoutInflater.from(viewGroup.context).inflate(R.layout.photo_item, viewGroup, false)
+        return PhotoViewHolder(v)
+    }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val photo = photos[position]
+        holder.photoImageView.setImageURI(buildUri(photo.farm, photo.server, photo.id, photo.secret))
     }
 
+    override fun getItemCount(): Int = photos.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
-    override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    class PhotoViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-
-//        var photoImageView: ImageView
-//
-//        init {
-//            photoImageView = v.findViewById(R.id.photo) as ImageView
-//        }
+    class PhotoViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        var photoImageView: SimpleDraweeView = v.findViewById<View>(R.id.imageViewId) as SimpleDraweeView
     }
 }

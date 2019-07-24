@@ -15,8 +15,10 @@ import android.preference.PreferenceManager
 import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.RecyclerView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.RecyclerView
+
+import java.util.ArrayList
 
 import com.google.android.material.snackbar.Snackbar
 
@@ -33,8 +35,6 @@ import timber.log.Timber
 class PhotoStreamFragment : Fragment() {
 
     private val viewModel: PhotoStreamViewModel by viewModel()
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var photoAdapter: PhotoAdapter
 
     // Used in checking for runtime permissions.
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
@@ -46,15 +46,15 @@ class PhotoStreamFragment : Fragment() {
     private var serviceBound = false
     // used to store button state
     private lateinit var sharedPref: SharedPreferences
+    // recycler view and adapter for retrieved photos
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var photoAdapter: PhotoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         locationReceiver = LocationReceiver()
-//        recyclerView = photo_recycler_view.apply {
-//            adapter = photoAdapter
-//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,9 +67,20 @@ class PhotoStreamFragment : Fragment() {
 
         viewModel.retrievePhotosFromDb()
         viewModel.photos.observe(viewLifecycleOwner, Observer { photos ->
-            //            my_image_view.setImageURI("https://farm${it.farm}.staticflickr.com/${it.server}/${it.id}_${it.secret}.jpg")
+            photoAdapter.populatePhotoAdapter(photos)
+            recyclerView.smoothScrollToPosition(0)
             Toast.makeText(context, "photos size: " + photos.size, Toast.LENGTH_SHORT).show()
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerView = imageRecyclerView
+        val photoList = ArrayList<Photo>()
+        photoAdapter = PhotoAdapter(photoList)
+        recyclerView.adapter = photoAdapter
+        recyclerView.isNestedScrollingEnabled = false
     }
 
     // Monitors the state of the connection to the service.
@@ -161,7 +172,6 @@ class PhotoStreamFragment : Fragment() {
                 getString(R.string.location_permission_text),
                 Snackbar.LENGTH_INDEFINITE
             ).setAction(getString(R.string.location_permission_action_ok_text)) {
-                // Request permission
                 requestPermissions(
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     REQUEST_PERMISSIONS_REQUEST_CODE
@@ -190,7 +200,6 @@ class PhotoStreamFragment : Fragment() {
                     Timber.i("=======> User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
                     Timber.i("=======> Permission was granted.")
-                    // Permission was granted.
                     locationService?.requestLocationUpdates()
                 }
                 else -> // Permission denied.
@@ -220,7 +229,8 @@ class PhotoStreamFragment : Fragment() {
             val photo = intent.getParcelableExtra<Photo>(LocationService.EXTRA_PHOTO)
             if (photo != null) {
                 Timber.i(" Photo broadcast received!")
-                //viewModel.getPhotoBasedOnLocation(location.latitude.toString(), location.longitude.toString())
+                photoAdapter.addPhoto(photo)
+                recyclerView.smoothScrollToPosition(0)
                 val loctext = "(" + photo.id + ", " + photo.farm + ")"
                 Toast.makeText(context, loctext, Toast.LENGTH_SHORT).show()
             }
