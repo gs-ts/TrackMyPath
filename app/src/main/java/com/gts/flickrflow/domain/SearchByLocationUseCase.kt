@@ -9,7 +9,7 @@ import com.gts.flickrflow.data.network.PhotoRepository
 
 class SearchByLocationUseCase(private val photoRepository: PhotoRepository) {
 
-    suspend operator fun invoke(lat: String, lon: String): Result<Photo> = withContext(Dispatchers.IO) {
-        return@withContext photoRepository.searchByLocation(lat, lon)
+    suspend operator fun invoke(lat: Double, lon: Double): Result<Photo> = withContext(Dispatchers.IO) {
+        return@withContext photoRepository.searchByLocation(lat.toString(), lon.toString())
     }
 }

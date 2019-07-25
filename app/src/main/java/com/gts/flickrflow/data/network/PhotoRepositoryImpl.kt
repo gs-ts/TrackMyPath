@@ -5,7 +5,6 @@ import java.lang.Exception
 
 import com.gts.flickrflow.core.Result
 import com.gts.flickrflow.data.database.PhotoDao
-import com.gts.flickrflow.data.model.toPhotoEntity
 import com.gts.flickrflow.domain.model.Photo
 import com.gts.flickrflow.domain.model.toPhoto
 
@@ -39,7 +38,7 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
     override suspend fun loadAllPhotos(): Result<List<Photo>> {
         val photos = photoDao.loadAllPhotos()
         return if (photos.isNotEmpty()) {
-            val result = photos.map { it.toPhoto() }
+            val result = photos.map {  photoEntity ->  photoEntity.toPhoto() }
             Result.Success(result)
         } else {
             Result.Error(Exception("Empty photos"))

@@ -1,4 +1,4 @@
-package com.gts.flickrflow.data.model
+package com.gts.flickrflow.data.network
 
 import com.squareup.moshi.Json
 import com.gts.flickrflow.data.database.PhotoEntity

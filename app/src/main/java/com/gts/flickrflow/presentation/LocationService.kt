@@ -189,16 +189,15 @@ class LocationService : Service() {
         this.location = location
 
         scope.launch {
-            val result = searchByLocationUseCase.invoke(location.latitude.toString(), location.longitude.toString())
+            val result = searchByLocationUseCase.invoke(location.latitude, location.longitude)
             when (result) {
                 is Result.Success -> {
                     // Notify anyone listening for broadcasts about the new photo.
                     val intent = Intent(ACTION_BROADCAST)
                     intent.putExtra(EXTRA_PHOTO, result.data)
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                    Timber.i("New location received and photo broadcast sent.")
                 }
-                is Result.Error -> Timber.i(" LocationService error!")
+                is Result.Error -> Timber.tag(TAG).e(" LocationService error!")
             }
         }
 
