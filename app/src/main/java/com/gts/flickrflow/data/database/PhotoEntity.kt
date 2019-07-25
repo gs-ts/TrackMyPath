@@ -6,7 +6,8 @@ import androidx.room.ColumnInfo
 
 @Entity(tableName = "photos")
 class PhotoEntity(
-    @PrimaryKey var id: String = "",
+    @PrimaryKey(autoGenerate = true) var photoId: Int,
+    @ColumnInfo(name = "id") var id: String = "",
     @ColumnInfo(name = "secret") var secret: String = "",
     @ColumnInfo(name = "server") var server: String = "",
     @ColumnInfo(name = "farm") var farm: String = ""

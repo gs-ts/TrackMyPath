@@ -33,6 +33,7 @@ data class PhotoResponse(
 )
 
 fun PhotoResponse.toPhotoEntity() = PhotoEntity(
+    photoId = 0,
     id = id,
     secret = secret,
     server = server,
