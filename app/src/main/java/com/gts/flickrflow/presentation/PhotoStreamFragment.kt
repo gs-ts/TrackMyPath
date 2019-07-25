@@ -5,7 +5,6 @@ import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
-import android.widget.Toast
 import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -77,17 +76,6 @@ class PhotoStreamFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_photo_stream, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel.retrievePhotosFromDb()
-        viewModel.photosFromDb.observe(viewLifecycleOwner, Observer { photos ->
-            photoAdapter.populate(photos)
-            recyclerView.smoothScrollToPosition(0)
-            Toast.makeText(context, "photos size: " + photos.size, Toast.LENGTH_SHORT).show()
-        })
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -96,10 +84,18 @@ class PhotoStreamFragment : Fragment() {
         photoAdapter = PhotoAdapter(photoList)
         recyclerView.adapter = photoAdapter
         recyclerView.isNestedScrollingEnabled = false
+
+        viewModel.photosFromDb.observe(viewLifecycleOwner, Observer { photos ->
+            photoAdapter.populate(photos)
+            recyclerView.smoothScrollToPosition(0)
+        })
     }
 
     override fun onStart() {
         super.onStart()
+
+        photoAdapter.resetPhotoList()
+        viewModel.retrievePhotosFromDb()
 
         buttonStart.text = PreferenceManager.getDefaultSharedPreferences(context).getString(getString(R.string.service_state), "Start")
         buttonStart.setOnClickListener {
@@ -120,7 +116,8 @@ class PhotoStreamFragment : Fragment() {
         // Bind to the service. If the service is in foreground mode, this signals to the service
         // that since this activity is in the foreground, the service can exit foreground mode.
         requireActivity().bindService(
-            Intent(context, LocationService::class.java), serviceConnection,
+            Intent(context, LocationService::class.java),
+            serviceConnection,
             Context.BIND_AUTO_CREATE
         )
     }
@@ -167,7 +164,6 @@ class PhotoStreamFragment : Fragment() {
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
-            Timber.i("Displaying permission rationale to provide additional context.")
             Snackbar.make(
                 fragment_main,
                 getString(R.string.location_permission_text),
@@ -179,7 +175,6 @@ class PhotoStreamFragment : Fragment() {
                 )
             }.show()
         } else {
-            Timber.i("Requesting permission")
             // Request permission. It's possible this can be auto answered if device policy sets the permission
             // in a given state or the user denied the permission previously and checked "Never ask again".
             requestPermissions(
@@ -193,14 +188,12 @@ class PhotoStreamFragment : Fragment() {
      * Callback received when a permissions request has been completed.
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        Timber.i("onRequestPermissionResult")
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
                 grantResults.isEmpty() ->
                     // If user interaction was interrupted, the permission request is cancelled and you receive empty arrays.
                     Timber.i("=======> User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
-                    Timber.i("=======> Permission was granted.")
                     locationService?.requestLocationUpdates()
                 }
                 else -> // Permission denied.
@@ -229,11 +222,8 @@ class PhotoStreamFragment : Fragment() {
         override fun onReceive(context: Context, intent: Intent) {
             val photo = intent.getParcelableExtra<Photo>(LocationService.EXTRA_PHOTO)
             if (photo != null) {
-                Timber.i(" Photo broadcast received!")
                 photoAdapter.addPhoto(photo)
                 recyclerView.smoothScrollToPosition(0)
-                val loctext = "(" + photo.id + ", " + photo.farm + ")"
-                Toast.makeText(context, loctext, Toast.LENGTH_SHORT).show()
             }
         }
     }

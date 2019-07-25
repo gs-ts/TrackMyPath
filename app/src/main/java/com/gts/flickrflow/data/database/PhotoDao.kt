@@ -7,10 +7,10 @@ import androidx.room.OnConflictStrategy
 
 @Dao
 interface PhotoDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(photo: PhotoEntity)
 
-    @Query("SELECT * FROM photos ORDER BY id DESC")
+    @Query("SELECT * FROM photos ORDER BY photoId DESC")
     fun loadAllPhotos(): Array<PhotoEntity>
 
     @Query("DELETE FROM photos")

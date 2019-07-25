@@ -192,12 +192,11 @@ class LocationService : Service() {
             val result = searchByLocationUseCase.invoke(location.latitude.toString(), location.longitude.toString())
             when (result) {
                 is Result.Success -> {
-                    Timber.i(" LocationService success!")
                     // Notify anyone listening for broadcasts about the new photo.
                     val intent = Intent(ACTION_BROADCAST)
                     intent.putExtra(EXTRA_PHOTO, result.data)
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-                    Timber.i(" Photo broadcast sent!")
+                    Timber.i("New location received and photo broadcast sent.")
                 }
                 is Result.Error -> Timber.i(" LocationService error!")
             }
@@ -214,10 +213,10 @@ class LocationService : Service() {
      */
     private fun createLocationRequest() {
         locationRequest = LocationRequest()
-//        mLocationRequest.smallestDisplacement = 100F
-        locationRequest.interval = 10000
-        locationRequest.fastestInterval = 10000 / 2
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.smallestDisplacement = 100F // 100 meters
+        locationRequest.interval = 60000
+        locationRequest.fastestInterval = 60000 / 2
     }
 
     /**

@@ -20,7 +20,7 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {
-                    photoDao.insert(data.photos.list[0].toPhotoEntity())
+                    photoDao.insert(data.photos.list[0].toPhotoEntity()) // take the first result from response
                     return Result.Success(data.photos.list[0].toPhoto())
                 } else {
                     Timber.e("searchByLocation data error")
@@ -38,11 +38,11 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
 
     override suspend fun loadAllPhotos(): Result<List<Photo>> {
         val photos = photoDao.loadAllPhotos()
-        if (photos.isNotEmpty()) {
+        return if (photos.isNotEmpty()) {
             val result = photos.map { it.toPhoto() }
-            return Result.Success(result)
+            Result.Success(result)
         } else {
-            return Result.Error(Exception("Empty photos"))
+            Result.Error(Exception("Empty photos"))
         }
 
     }

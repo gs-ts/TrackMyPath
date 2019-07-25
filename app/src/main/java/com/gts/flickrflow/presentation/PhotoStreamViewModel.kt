@@ -22,11 +22,13 @@ class PhotoStreamViewModel(
         get() = _photosFromDb
 
     fun retrievePhotosFromDb() {
+        Timber.i("retrievePhotosFromDb")
         viewModelScope.launch {
             val result = retrievePhotosFromDbUseCase.invoke()
             when (result) {
                 is Result.Success -> {
                     _photosFromDb.postValue(result.data)
+                    Timber.i("send photo from DB")
                 }
                 is Result.Error -> Timber.d("no photos")
             }
