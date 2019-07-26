@@ -1,16 +1,20 @@
 package com.gts.flickrflow.domain
 
-import com.gts.flickrflow.core.Result
-import com.gts.flickrflow.data.network.PhotoRepository
-import com.gts.flickrflow.domain.model.Photo
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.assertEquals
+
 import java.io.IOException
+
+import kotlinx.coroutines.runBlocking
+
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+
+import com.gts.flickrflow.core.Result
+import com.gts.flickrflow.domain.model.Photo
+import com.gts.flickrflow.data.network.PhotoRepository
 
 class SearchPhotoByLocationUseCaseTest {
 

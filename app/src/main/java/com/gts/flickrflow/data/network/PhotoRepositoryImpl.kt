@@ -41,7 +41,7 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
             val result = photos.map {  photoEntity ->  photoEntity.toPhoto() }
             Result.Success(result)
         } else {
-            Result.Error(Exception("Empty photos"))
+            Result.Error(IOException("Failed to retrieve photos from database"))
         }
 
     }
