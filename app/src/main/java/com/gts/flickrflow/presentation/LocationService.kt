@@ -32,7 +32,7 @@ import org.koin.android.ext.android.inject
 import com.gts.flickrflow.R
 import com.gts.flickrflow.core.Result
 import com.gts.flickrflow.domain.EmptyPhotosDbUseCase
-import com.gts.flickrflow.domain.SearchByLocationUseCase
+import com.gts.flickrflow.domain.SearchPhotoByLocationUseCase
 
 import timber.log.Timber
 
@@ -57,7 +57,7 @@ class LocationService : Service() {
     private lateinit var location: Location
     private lateinit var notificationManager: NotificationManager
 
-    private val searchByLocationUseCase: SearchByLocationUseCase by inject()
+    private val searchPhotoByLocationUseCase: SearchPhotoByLocationUseCase by inject()
     private val emptyPhotosDbUseCase: EmptyPhotosDbUseCase by inject()
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -189,7 +189,7 @@ class LocationService : Service() {
         this.location = location
 
         scope.launch {
-            val result = searchByLocationUseCase.invoke(location.latitude, location.longitude)
+            val result = searchPhotoByLocationUseCase.invoke(location.latitude, location.longitude)
             when (result) {
                 is Result.Success -> {
                     // Notify anyone listening for broadcasts about the new photo.

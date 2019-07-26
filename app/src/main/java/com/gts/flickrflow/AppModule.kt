@@ -22,7 +22,7 @@ import com.gts.flickrflow.data.network.PhotoRepository
 import com.gts.flickrflow.data.network.PhotoRepositoryImpl
 import com.gts.flickrflow.domain.EmptyPhotosDbUseCase
 import com.gts.flickrflow.domain.RetrievePhotosFromDbUseCase
-import com.gts.flickrflow.domain.SearchByLocationUseCase
+import com.gts.flickrflow.domain.SearchPhotoByLocationUseCase
 import com.gts.flickrflow.presentation.PhotoStreamViewModel
 
 val appModule = module {
@@ -32,7 +32,7 @@ val appModule = module {
     single<PhotoRepository> {
         PhotoRepositoryImpl(flickrApi = get(), photoDao = get())
     }
-    single { SearchByLocationUseCase(photoRepository = get()) }
+    single { SearchPhotoByLocationUseCase(photoRepository = get()) }
     single { EmptyPhotosDbUseCase(photoRepository = get()) }
     single { RetrievePhotosFromDbUseCase(photoRepository = get()) }
     viewModel { PhotoStreamViewModel(retrievePhotosFromDbUseCase = get()) }

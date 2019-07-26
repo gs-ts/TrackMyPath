@@ -12,7 +12,7 @@ import timber.log.Timber
 
 class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao: PhotoDao) : PhotoRepository {
 
-    override suspend fun searchByLocation(lat: String, lon: String): Result<Photo> {
+    override suspend fun searchPhotoByLocation(lat: String, lon: String): Result<Photo> {
         return try {
             val response = flickrApi.search(FlickrApi.API_KEY, lat, lon).await()
 
@@ -22,16 +22,16 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
                     photoDao.insert(data.photos.list[0].toPhotoEntity()) // take the first result from response
                     return Result.Success(data.photos.list[0].toPhoto())
                 } else {
-                    Timber.e("searchByLocation data error")
-                    Result.Error(IOException("searchByLocation data error"))
+                    Timber.e("searchPhotoByLocation data error")
+                    Result.Error(IOException("searchPhotoByLocation data error"))
                 }
             } else {
-                Timber.e("searchByLocation response error")
-                Result.Error(IOException("searchByLocation response error"))
+                Timber.e("searchPhotoByLocation response error")
+                Result.Error(IOException("searchPhotoByLocation response error"))
             }
         } catch (e: Exception) {
-            Timber.e(e, "searchByLocation exception")
-            Result.Error(IOException("searchByLocation exception", e))
+            Timber.e(e, "searchPhotoByLocation exception")
+            Result.Error(IOException("searchPhotoByLocation exception", e))
         }
     }
 
