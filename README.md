@@ -31,3 +31,6 @@ Sources: [1](https://medium.com/androiddevelopers/google-i-o-2018-app-architectu
 - [OkHttp](https://square.github.io/okhttp/)
 - [moshi](https://github.com/square/moshi), JSON library for Kotlin and Java 
 - [Timber](https://github.com/JakeWharton/timber), a logger which provides utility on top of Android’s Log class
+
+##### Flickr API:
+- [flickr.photos.search](https://www.flickr.com/services/api/flickr.photos.search.html)
