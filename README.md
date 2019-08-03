@@ -20,7 +20,7 @@ Sources: [1](https://medium.com/androiddevelopers/google-i-o-2018-app-architectu
 - LiveData 
 - Room
 - [Location](https://github.com/googlesamples/android-play-location/tree/master/LocationUpdatesForegroundService)
-- ActivityScenario, for instrumentation test (part of AndroidX Test) 
+- [ActivityScenario](https://developer.android.com/guide/components/activities/testing), instrumentation testing (part of AndroidX Test) 
 - Espresso (UI tests)
 
 ##### Libraries:
