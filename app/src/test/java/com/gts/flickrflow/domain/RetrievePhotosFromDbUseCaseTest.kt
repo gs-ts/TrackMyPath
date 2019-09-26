@@ -12,7 +12,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 
-import com.gts.flickrflow.core.Result
+import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
 import com.gts.flickrflow.data.network.PhotoRepository
 

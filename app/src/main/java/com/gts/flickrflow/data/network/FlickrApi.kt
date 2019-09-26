@@ -10,6 +10,7 @@ internal const val URLS = "url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url
 
 interface FlickrApi {
 
+    // Deferred is a light-weight non-blocking future that represents a promise to provide a result later
     @GET("$ENDPOINT$METHOD_PHOTOS_SEARCH$EXTRA_PARAMS")
     fun search(
         @Query("api_key") apiKey: String,

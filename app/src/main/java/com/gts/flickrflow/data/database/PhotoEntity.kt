@@ -4,6 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ColumnInfo
 
+// This class will have a mapping SQLite table in the database.
+// Each entity must have at least 1 field annotated with PrimaryKey.
+// Each entity must either have a no-arg constructor or a constructor whose parameters match fields (based on type and name).
 @Entity(tableName = "photos")
 class PhotoEntity(
     @PrimaryKey(autoGenerate = true) var photoId: Int,

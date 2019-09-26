@@ -10,12 +10,12 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.provider.Settings
 import android.content.pm.PackageManager
-import android.preference.PreferenceManager
 import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import java.util.ArrayList
 

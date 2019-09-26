@@ -25,16 +25,32 @@ import com.gts.flickrflow.domain.RetrievePhotosFromDbUseCase
 import com.gts.flickrflow.domain.SearchPhotoByLocationUseCase
 import com.gts.flickrflow.presentation.PhotoStreamViewModel
 
+// declare a module
 val appModule = module {
+    // Define single instance of Retrofit
     single { provideFlickrApi().create(FlickrApi::class.java) }
+    // Define single instance of RoomDatabase.Builder
+    // RoomDatabase.Builder for a persistent database
+    // Once a database is built, you should keep a reference to it and re-use it
     single { Room.databaseBuilder(androidApplication(), PhotoDatabase::class.java, "photo-db").build() }
+    // Define single instance of PhotoDatabase
     single { get<PhotoDatabase>().photoDao() }
+    // Define single instance of type PhotoRepository
+    // Resolve constructor dependencies with get(), here we need a flickrApi and photoDao
     single<PhotoRepository> {
         PhotoRepositoryImpl(flickrApi = get(), photoDao = get())
     }
+    // Define single instance of SearchPhotoByLocationUseCase
+    // Resolve constructor dependencies with get(), here we need a photoRepository
     single { SearchPhotoByLocationUseCase(photoRepository = get()) }
+    // Define single instance of EmptyPhotosDbUseCase
+    // Resolve constructor dependencies with get(), here we need a photoRepository
     single { EmptyPhotosDbUseCase(photoRepository = get()) }
+    // Define single instance of RetrievePhotosFromDbUseCase
+    // Resolve constructor dependencies with get(), here we need a photoRepository
     single { RetrievePhotosFromDbUseCase(photoRepository = get()) }
+    // Define ViewModel and resolve constructor dependencies with get(),
+    // here we need retrievePhotosFromDbUseCase
     viewModel { PhotoStreamViewModel(retrievePhotosFromDbUseCase = get()) }
 }
 

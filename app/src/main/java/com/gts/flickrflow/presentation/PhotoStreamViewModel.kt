@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 
 import kotlinx.coroutines.launch
 
-import com.gts.flickrflow.core.Result
+import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
 import com.gts.flickrflow.domain.RetrievePhotosFromDbUseCase
 
