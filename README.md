@@ -13,8 +13,6 @@ Clean architecture consists of three layers:
 - **Domain**, which includes models, entities, and usecases
 - **Presentation**, which includes UI related components, such as ViewModels, Fragments, Activities
 
-Sources: [1](https://medium.com/androiddevelopers/google-i-o-2018-app-architecture-and-testing-f546e37fc7eb), [2](https://rubygarage.org/blog/clean-android-architecture), [3](https://proandroiddev.com/clean-architecture-data-flow-dependency-rule-615ffdd79e29)
-
 ##### Android Jetpack Components used:
 - Fragment
 - ViewModel 
@@ -35,3 +33,8 @@ Sources: [1](https://medium.com/androiddevelopers/google-i-o-2018-app-architectu
 
 ##### Flickr API:
 - [flickr.photos.search](https://www.flickr.com/services/api/flickr.photos.search.html)
+
+Sources:
+- [Google I/O 2018 app — Architecture and Testing](https://medium.com/androiddevelopers/google-i-o-2018-app-architecture-and-testing-f546e37fc7eb)
+- [Clean Architecture of Android Apps with Practical Examples](https://rubygarage.org/blog/clean-android-architecture)
+- [Clean Architecture Guide (with tested examples): Data Flow != Dependency Rule](https://proandroiddev.com/clean-architecture-data-flow-dependency-rule-615ffdd79e29)
