@@ -19,7 +19,6 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
     override suspend fun searchPhotoByLocation(lat: String, lon: String): Result<Photo> {
         return try {
             val response = flickrApi.search(FlickrApi.API_KEY, lat, lon).await()
-
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {

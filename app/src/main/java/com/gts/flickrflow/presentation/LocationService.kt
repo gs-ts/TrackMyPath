@@ -215,8 +215,7 @@ class LocationService : Service() {
         this.location = location
 
         scope.launch {
-            val result = searchPhotoByLocationUseCase.invoke(location.latitude, location.longitude)
-            when (result) {
+            when ( val result = searchPhotoByLocationUseCase.invoke(location.latitude, location.longitude)) {
                 is Result.Success -> {
                     // Notify anyone listening for broadcasts about the new photo.
                     val intent = Intent(ACTION_BROADCAST)

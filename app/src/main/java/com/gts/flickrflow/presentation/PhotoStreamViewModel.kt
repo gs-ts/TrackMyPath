@@ -23,8 +23,7 @@ class PhotoStreamViewModel(
 
     fun retrievePhotosFromDb() {
         viewModelScope.launch {
-            val result = retrievePhotosFromDbUseCase.invoke()
-            when (result) {
+            when (val result = retrievePhotosFromDbUseCase.invoke()) {
                 is Result.Success -> {
                     _photosFromDb.postValue(result.data)
                 }
