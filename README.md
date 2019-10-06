@@ -9,9 +9,9 @@ An android app that tracks your walk with images every 100 meters:
 
 ### MVVM pattern with Clean architecture (as much as possible) developed with Kotlin.
 Clean architecture consists of three layers:
-- **Data**, which includes databases, clients, repositories, network
-- **Domain**, which includes models, entities, and usecases
-- **Presentation**, which includes UI related components, such as ViewModels, Fragments, Activities
+- **Data**, includes data objects, databases, network clients, repositories.
+- **Domain**, includes use cases of business logic. This layer orchestrates the flow of data from Data Layer to Presentation and the oterh way.
+- **Presentation**, includes UI related components, such as ViewModels, Fragments, Activities.
 
 ##### Android Jetpack Components used:
 - Fragment
