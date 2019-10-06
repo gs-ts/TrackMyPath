@@ -1,7 +1,9 @@
 package com.gts.flickrflow.data.network
 
 import com.squareup.moshi.Json
+
 import com.gts.flickrflow.data.database.PhotoEntity
+import com.gts.flickrflow.domain.model.Photo
 
 data class PhotosResponse(
     @Json(name = "photos")
@@ -32,8 +34,17 @@ data class PhotoResponse(
     val farm: String
 )
 
+// map to DB entity, PhotoEntity
 fun PhotoResponse.toPhotoEntity() = PhotoEntity(
     photoId = 0,
+    id = id,
+    secret = secret,
+    server = server,
+    farm = farm
+)
+
+// map to data class, Photo
+fun PhotoResponse.toPhotoModel() = Photo(
     id = id,
     secret = secret,
     server = server,

@@ -16,10 +16,10 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 
-import com.gts.flickrflow.data.database.PhotoDatabase
 import com.gts.flickrflow.data.network.FlickrApi
-import com.gts.flickrflow.data.network.PhotoRepository
+import com.gts.flickrflow.data.database.PhotoDatabase
 import com.gts.flickrflow.data.network.PhotoRepositoryImpl
+import com.gts.flickrflow.domain.PhotoRepository
 import com.gts.flickrflow.domain.EmptyPhotosDbUseCase
 import com.gts.flickrflow.domain.RetrievePhotosFromDbUseCase
 import com.gts.flickrflow.domain.SearchPhotoByLocationUseCase

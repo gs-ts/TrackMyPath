@@ -5,7 +5,6 @@ import kotlinx.coroutines.withContext
 
 import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
-import com.gts.flickrflow.data.network.PhotoRepository
 
 class SearchPhotoByLocationUseCase(private val photoRepository: PhotoRepository) {
 

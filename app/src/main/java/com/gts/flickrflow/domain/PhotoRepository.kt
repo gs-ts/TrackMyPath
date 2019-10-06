@@ -1,4 +1,4 @@
-package com.gts.flickrflow.data.network
+package com.gts.flickrflow.domain
 
 import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
