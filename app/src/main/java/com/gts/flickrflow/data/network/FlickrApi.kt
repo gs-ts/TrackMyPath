@@ -16,6 +16,7 @@ interface FlickrApi {
         @Query("api_key") apiKey: String,
         @Query("lat") lat: String? = null,
         @Query("lon") lon: String? = null,
+        @Query("radius ") radius: String? = null,
         @Query("extras") extras: String = URLS
     ): Deferred<Response<PhotosResponse>>
 

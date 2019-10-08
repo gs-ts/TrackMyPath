@@ -20,7 +20,10 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
     // request a photo from flickr service based on current location
     override suspend fun searchPhotoByLocation(lat: String, lon: String): Result<Photo> {
         return try {
-            val response = flickrApi.search(FlickrApi.API_KEY, lat, lon).await()
+            // Radius used for geo queries, greater than zero and less than 20 miles (or 32 kilometers),
+            // for use with point-based geo queries. The default value is 5 (km).
+            // Set a radius of 1 km.
+            val response = flickrApi.search(FlickrApi.API_KEY, lat, lon, "1").await()
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {
