@@ -22,8 +22,8 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
         return try {
             // Radius used for geo queries, greater than zero and less than 20 miles (or 32 kilometers),
             // for use with point-based geo queries. The default value is 5 (km).
-            // Set a radius of 1 km.
-            val response = flickrApi.search(FlickrApi.API_KEY, lat, lon, "1").await()
+            // Set a radius of 100 meters.
+            val response = flickrApi.search(FlickrApi.API_KEY, lat, lon, "0.1")
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {

@@ -1,7 +1,5 @@
 package com.gts.flickrflow.data.network
 
-import kotlinx.coroutines.Deferred
-
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,13 +10,13 @@ interface FlickrApi {
 
     // Deferred is a light-weight non-blocking future that represents a promise to provide a result later
     @GET("$ENDPOINT$METHOD_PHOTOS_SEARCH$EXTRA_PARAMS")
-    fun search(
+    suspend fun search(
         @Query("api_key") apiKey: String,
         @Query("lat") lat: String? = null,
         @Query("lon") lon: String? = null,
         @Query("radius ") radius: String? = null,
         @Query("extras") extras: String = URLS
-    ): Deferred<Response<PhotosResponse>>
+    ): Response<PhotosResponse>
 
     companion object {
         const val API_KEY = "58cace78ed8d64e8490e5e3341a96930"

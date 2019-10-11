@@ -14,7 +14,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 
 import com.gts.flickrflow.data.network.FlickrApi
 import com.gts.flickrflow.data.database.PhotoDatabase
@@ -64,7 +63,6 @@ private val jsonMoshi = Moshi.Builder()
 
 private fun provideFlickrApi(): Retrofit {
     return Retrofit.Builder()
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(MoshiConverterFactory.create(jsonMoshi))
         .baseUrl("https://api.flickr.com/")
         .client(okHttpClient)
