@@ -14,7 +14,7 @@ import timber.log.Timber
 // In this app only one data source is used to fetch data (photos), the flickr service.
 // Then the fetched data are stored in the database.
 // The fetched photos can be then used by the view to create a flow of images.
-class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao: PhotoDao) :
+class PhotoRepositoryImpl(private val flickrService: FlickrService, private val photoDao: PhotoDao) :
     PhotoRepository {
 
     // request a photo from flickr service based on current location
@@ -23,7 +23,7 @@ class PhotoRepositoryImpl(private val flickrApi: FlickrApi, private val photoDao
             // Radius used for geo queries, greater than zero and less than 20 miles (or 32 kilometers),
             // for use with point-based geo queries. The default value is 5 (km).
             // Set a radius of 100 meters.
-            val response = flickrApi.search(FlickrApi.API_KEY, lat, lon, "0.1")
+            val response = flickrService.search(FlickrService.API_KEY, lat, lon, "0.1")
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {

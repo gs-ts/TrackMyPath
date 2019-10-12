@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 internal const val URLS = "url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o"
 
-interface FlickrApi {
+interface FlickrService {
 
     // Deferred is a light-weight non-blocking future that represents a promise to provide a result later
     @GET("$ENDPOINT$METHOD_PHOTOS_SEARCH$EXTRA_PARAMS")

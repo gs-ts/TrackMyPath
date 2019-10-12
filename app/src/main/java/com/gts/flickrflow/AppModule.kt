@@ -15,7 +15,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
-import com.gts.flickrflow.data.network.FlickrApi
+import com.gts.flickrflow.data.network.FlickrService
 import com.gts.flickrflow.data.database.PhotoDatabase
 import com.gts.flickrflow.data.network.PhotoRepositoryImpl
 import com.gts.flickrflow.domain.PhotoRepository
@@ -27,7 +27,7 @@ import com.gts.flickrflow.presentation.PhotoStreamViewModel
 // declare a module
 val appModule = module {
     // Define single instance of Retrofit
-    single { provideFlickrApi().create(FlickrApi::class.java) }
+    single { provideFlickrApi().create(FlickrService::class.java) }
     // Define single instance of RoomDatabase.Builder
     // RoomDatabase.Builder for a persistent database
     // Once a database is built, you should keep a reference to it and re-use it
@@ -37,7 +37,7 @@ val appModule = module {
     // Define single instance of type PhotoRepository
     // Resolve constructor dependencies with get(), here we need a flickrApi and photoDao
     single<PhotoRepository> {
-        PhotoRepositoryImpl(flickrApi = get(), photoDao = get())
+        PhotoRepositoryImpl(flickrService = get(), photoDao = get())
     }
     // Define single instance of SearchPhotoByLocationUseCase
     // Resolve constructor dependencies with get(), here we need a photoRepository
