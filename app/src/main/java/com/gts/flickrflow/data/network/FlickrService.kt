@@ -18,7 +18,7 @@ interface FlickrService {
     ): Response<PhotosResponse>
 
     companion object {
-        const val API_KEY = "58cace78ed8d64e8490e5e3341a96930"
+        const val API_KEY = "USE_YOUR_API_KEY"
         private const val ENDPOINT = "https://www.flickr.com/services/rest/"
         private const val METHOD_PHOTOS_SEARCH = "?method=flickr.photos.search"
         private const val EXTRA_PARAMS = "&nojsoncallback=1&format=json"
