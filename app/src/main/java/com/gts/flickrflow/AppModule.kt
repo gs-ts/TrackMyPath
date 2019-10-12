@@ -54,7 +54,12 @@ val appModule = module {
 }
 
 private val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+    .addInterceptor(run {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.apply {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        }
+    })
     .build()
 
 private val jsonMoshi = Moshi.Builder()
