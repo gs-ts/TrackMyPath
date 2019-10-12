@@ -5,7 +5,8 @@ An android app that tracks your walk with images every 100 meters:
 - pictures are shown in a list, and user can scroll through the stream
 - one button start/stop, on each start the previous stream of photos gets wiped
 
-*please create a Flickr account and use your own api key. Add it in the FlickrService file.*
+*Please create a Flickr account and use your own api key. Add it in the FlickrService file.*
+
 ---
 
 ### MVVM pattern with Clean architecture (as much as possible) developed with Kotlin.
