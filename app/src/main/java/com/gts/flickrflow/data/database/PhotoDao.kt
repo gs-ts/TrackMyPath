@@ -13,7 +13,7 @@ interface PhotoDao {
     suspend fun insert(photo: PhotoEntity)
 
     @Query("SELECT * FROM photos ORDER BY photoId DESC")
-    suspend fun loadAllPhotos(): Array<PhotoEntity>
+    suspend fun selectAllPhotos(): Array<PhotoEntity>
 
     @Query("DELETE FROM photos")
     suspend fun deletePhotos()

@@ -5,12 +5,12 @@ import com.squareup.moshi.Json
 import com.gts.flickrflow.data.database.PhotoEntity
 import com.gts.flickrflow.domain.model.Photo
 
-data class PhotosResponse(
+data class ResponseEntity(
     @Json(name = "photos")
-    val photos: Photos
+    val photosResponseEntity: PhotosResponseEntity
 )
 
-data class Photos(
+data class PhotosResponseEntity(
     @Json(name = "page")
     val page: Int,
     @Json(name = "pages")
@@ -20,10 +20,10 @@ data class Photos(
     @Json(name = "total")
     val total: String,
     @Json(name = "photo")
-    val list: List<PhotoResponse>
+    val list: List<PhotoResponseEntity>
 )
 
-data class PhotoResponse(
+data class PhotoResponseEntity(
     @Json(name = "id")
     val id: String,
     @Json(name = "secret")
@@ -35,7 +35,7 @@ data class PhotoResponse(
 )
 
 // map to DB entity, PhotoEntity
-fun PhotoResponse.toPhotoEntity() = PhotoEntity(
+fun PhotoResponseEntity.toPhotoEntity() = PhotoEntity(
     photoId = 0,
     id = id,
     secret = secret,
@@ -44,7 +44,7 @@ fun PhotoResponse.toPhotoEntity() = PhotoEntity(
 )
 
 // map to data class, Photo
-fun PhotoResponse.toPhotoModel() = Photo(
+fun PhotoResponseEntity.toPhotoModel() = Photo(
     id = id,
     secret = secret,
     server = server,

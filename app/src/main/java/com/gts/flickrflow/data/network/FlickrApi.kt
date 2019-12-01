@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 internal const val URLS = "url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o"
 
-interface FlickrService {
+interface FlickrApi {
 
     @GET("$ENDPOINT$METHOD_PHOTOS_SEARCH$EXTRA_PARAMS")
     suspend fun search(
@@ -15,7 +15,7 @@ interface FlickrService {
         @Query("lon") lon: String? = null,
         @Query("radius ") radius: String? = null,
         @Query("extras") extras: String = URLS
-    ): Response<PhotosResponse>
+    ): Response<ResponseEntity>
 
     companion object {
         const val API_KEY = "58cace78ed8d64e8490e5e3341a96930"

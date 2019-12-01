@@ -15,7 +15,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
 
-class RetrievePhotosFromDbUseCaseTest {
+class RetrievePhotosResponseEntityFromDbUseCaseTest {
 
     private lateinit var retrievePhotosFromDbUseCase: RetrievePhotosFromDbUseCase
     private val mockPhotoRepository: PhotoRepository = mock()
