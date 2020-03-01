@@ -18,6 +18,7 @@ Clean architecture consists of three layers:
 ##### Android Jetpack Components used:
 - Fragment
 - ViewModel 
+- View Binding
 - LiveData 
 - Room
 - [Location](https://github.com/googlesamples/android-play-location/tree/master/LocationUpdatesForegroundService)
