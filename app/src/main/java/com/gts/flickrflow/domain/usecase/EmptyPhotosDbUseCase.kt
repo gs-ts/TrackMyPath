@@ -1,5 +1,6 @@
-package com.gts.flickrflow.domain
+package com.gts.flickrflow.domain.usecase
 
+import com.gts.flickrflow.domain.PhotoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

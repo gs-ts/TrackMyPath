@@ -21,9 +21,9 @@ import com.gts.flickrflow.data.network.FlickrDataSource
 import com.gts.flickrflow.data.network.FlickrDataSourceImpl
 import com.gts.flickrflow.data.database.PhotoDatabase
 import com.gts.flickrflow.domain.PhotoRepository
-import com.gts.flickrflow.domain.EmptyPhotosDbUseCase
-import com.gts.flickrflow.domain.RetrievePhotosFromDbUseCase
-import com.gts.flickrflow.domain.SearchPhotoByLocationUseCase
+import com.gts.flickrflow.domain.usecase.EmptyPhotosDbUseCase
+import com.gts.flickrflow.domain.usecase.RetrievePhotosFromDbUseCase
+import com.gts.flickrflow.domain.usecase.SearchPhotoByLocationUseCase
 import com.gts.flickrflow.presentation.PhotoStreamViewModel
 
 // declare a module
@@ -46,13 +46,25 @@ val appModule = module {
     }
     // Define single instance of SearchPhotoByLocationUseCase
     // Resolve constructor dependencies with get(), here we need a photoRepository
-    single { SearchPhotoByLocationUseCase(photoRepository = get()) }
+    single {
+        SearchPhotoByLocationUseCase(
+            photoRepository = get()
+        )
+    }
     // Define single instance of EmptyPhotosDbUseCase
     // Resolve constructor dependencies with get(), here we need a photoRepository
-    single { EmptyPhotosDbUseCase(photoRepository = get()) }
+    single {
+        EmptyPhotosDbUseCase(
+            photoRepository = get()
+        )
+    }
     // Define single instance of RetrievePhotosFromDbUseCase
     // Resolve constructor dependencies with get(), here we need a photoRepository
-    single { RetrievePhotosFromDbUseCase(photoRepository = get()) }
+    single {
+        RetrievePhotosFromDbUseCase(
+            photoRepository = get()
+        )
+    }
     // Define ViewModel and resolve constructor dependencies with get(),
     // here we need retrievePhotosFromDbUseCase
     viewModel { PhotoStreamViewModel(retrievePhotosFromDbUseCase = get()) }

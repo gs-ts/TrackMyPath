@@ -5,8 +5,8 @@ import java.lang.Exception
 
 import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.data.database.PhotoDao
-import com.gts.flickrflow.data.database.toPhotoModel
-import com.gts.flickrflow.data.network.toPhotoModel
+import com.gts.flickrflow.data.database.toDomainModel
+import com.gts.flickrflow.data.network.toDomainModel
 import com.gts.flickrflow.data.network.toPhotoEntity
 import com.gts.flickrflow.data.network.FlickrDataSource
 import com.gts.flickrflow.domain.model.Photo
@@ -20,12 +20,12 @@ class PhotoRepositoryImpl(private val flickrDataSource: FlickrDataSource, privat
         return try {
             // Radius used for geo queries, greater than zero and less than 20 miles (or 32 kilometers),
             // for use with point-based geo queries. The default value is 5 (km).
-            // Set a radius of 100 meters.
+            // Set a radius of 100 meters. (default unit is km)
             return when (val response = flickrDataSource.searchPhoto(lat, lon, "0.1")) {
                 is Result.Success -> {
                     // save it in the DB
                     photoDao.insert(response.data.toPhotoEntity())
-                    Result.Success(response.data.toPhotoModel())
+                    Result.Success(response.data.toDomainModel())
                 }
                 is Result.Error -> {
                     Result.Error(response.exception)
@@ -41,7 +41,7 @@ class PhotoRepositoryImpl(private val flickrDataSource: FlickrDataSource, privat
     override suspend fun loadAllPhotos(): Result<List<Photo>> {
         val photos = photoDao.selectAllPhotos()
         return if (photos.isNotEmpty()) {
-            val result = photos.map {  photoEntity ->  photoEntity.toPhotoModel() }
+            val result = photos.map {  photoEntity ->  photoEntity.toDomainModel() }
             Result.Success(result)
         } else {
             Result.Error(IOException("Failed to retrieve photos from database"))

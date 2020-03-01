@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.view.SimpleDraweeView
 
 import com.gts.flickrflow.R
-import com.gts.flickrflow.domain.model.Photo
+import com.gts.flickrflow.presentation.model.PhotoViewItem
 
-class PhotoAdapter(private val photos: MutableList<Photo>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
-    fun addPhoto(photo: Photo) {
-        // Add the photo at the beggining of the list
+    fun addPhoto(photo: PhotoViewItem) {
+        // Add the photo at the beginning of the list
         photos.add(0, photo)
         notifyItemInserted(0)
     }
 
-    fun populate(photosFromDb: List<Photo>) {
+    fun populate(photosFromDb: List<PhotoViewItem>) {
         photos.addAll(photosFromDb)
         notifyDataSetChanged()
     }

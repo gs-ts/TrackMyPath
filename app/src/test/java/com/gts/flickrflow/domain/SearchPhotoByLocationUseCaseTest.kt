@@ -14,6 +14,7 @@ import com.nhaarman.mockitokotlin2.whenever
 
 import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
+import com.gts.flickrflow.domain.usecase.SearchPhotoByLocationUseCase
 
 class SearchPhotoByLocationUseCaseTest {
 
@@ -25,7 +26,10 @@ class SearchPhotoByLocationUseCaseTest {
 
     @Before
     fun setUp() {
-        searchPhotoByLocationUseCase = SearchPhotoByLocationUseCase(mockPhotoRepository)
+        searchPhotoByLocationUseCase =
+            SearchPhotoByLocationUseCase(
+                mockPhotoRepository
+            )
     }
 
     @Test

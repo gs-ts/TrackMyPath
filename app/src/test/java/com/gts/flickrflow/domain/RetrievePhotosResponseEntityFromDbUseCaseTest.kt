@@ -14,6 +14,7 @@ import com.nhaarman.mockitokotlin2.whenever
 
 import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
+import com.gts.flickrflow.domain.usecase.RetrievePhotosFromDbUseCase
 
 class RetrievePhotosResponseEntityFromDbUseCaseTest {
 
@@ -23,7 +24,10 @@ class RetrievePhotosResponseEntityFromDbUseCaseTest {
 
     @Before
     fun setUp() {
-        retrievePhotosFromDbUseCase = RetrievePhotosFromDbUseCase(mockPhotoRepository)
+        retrievePhotosFromDbUseCase =
+            RetrievePhotosFromDbUseCase(
+                mockPhotoRepository
+            )
     }
 
     @Test

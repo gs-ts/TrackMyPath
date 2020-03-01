@@ -27,7 +27,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.gts.flickrflow.R
 import com.gts.flickrflow.BuildConfig
-import com.gts.flickrflow.domain.model.Photo
+import com.gts.flickrflow.presentation.model.PhotoViewItem
+import com.gts.flickrflow.presentation.service.LocationService
 
 import timber.log.Timber
 
@@ -80,7 +81,7 @@ class PhotoStreamFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = imageRecyclerView
-        val photoList = ArrayList<Photo>()
+        val photoList = ArrayList<PhotoViewItem>()
         photoAdapter = PhotoAdapter(photoList)
         recyclerView.adapter = photoAdapter
         recyclerView.isNestedScrollingEnabled = false
@@ -220,7 +221,7 @@ class PhotoStreamFragment : Fragment() {
      */
     private inner class LocationReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val photo = intent.getParcelableExtra<Photo>(LocationService.EXTRA_PHOTO)
+            val photo = intent.getParcelableExtra<PhotoViewItem>(LocationService.EXTRA_PHOTO)
             if (photo != null) {
                 photoAdapter.addPhoto(photo)
                 recyclerView.smoothScrollToPosition(0)

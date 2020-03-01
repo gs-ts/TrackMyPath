@@ -1,9 +1,10 @@
-package com.gts.flickrflow.domain
+package com.gts.flickrflow.domain.usecase
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import com.gts.flickrflow.common.Result
+import com.gts.flickrflow.domain.PhotoRepository
 import com.gts.flickrflow.domain.model.Photo
 
 class SearchPhotoByLocationUseCase(private val photoRepository: PhotoRepository) {

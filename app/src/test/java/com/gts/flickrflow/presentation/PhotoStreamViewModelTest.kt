@@ -16,7 +16,9 @@ import com.nhaarman.mockitokotlin2.whenever
 
 import com.gts.flickrflow.common.Result
 import com.gts.flickrflow.domain.model.Photo
-import com.gts.flickrflow.domain.RetrievePhotosFromDbUseCase
+import com.gts.flickrflow.domain.usecase.RetrievePhotosFromDbUseCase
+import com.gts.flickrflow.presentation.model.PhotoViewItem
+import com.gts.flickrflow.presentation.model.toPresentationModel
 
 class PhotoStreamViewModelTest {
 
@@ -40,8 +42,8 @@ class PhotoStreamViewModelTest {
         // when
         viewModel.retrievePhotosFromDb()
         // then
-        val photoList: List<Photo>? = LiveDataTestUtil.getValue(viewModel.photosFromDb)
+        val photoList: List<PhotoViewItem>? = LiveDataTestUtil.getValue(viewModel.photosFromDb)
         Assert.assertNotNull(photoList)
-        Assert.assertEquals(expected.data, photoList)
+        Assert.assertEquals(expected.data.map { it.toPresentationModel() }, photoList)
     }
 }

@@ -43,8 +43,7 @@ fun PhotoResponseEntity.toPhotoEntity() = PhotoEntity(
     farm = farm
 )
 
-// map to data class, Photo
-fun PhotoResponseEntity.toPhotoModel() = Photo(
+fun PhotoResponseEntity.toDomainModel() = Photo(
     id = id,
     secret = secret,
     server = server,

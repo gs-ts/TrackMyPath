@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gts.flickrflow.presentation
+package com.gts.flickrflow.presentation.service
 
 import android.os.Build
 import android.os.Binder
@@ -50,8 +50,10 @@ import org.koin.android.ext.android.inject
 
 import com.gts.flickrflow.R
 import com.gts.flickrflow.common.Result
-import com.gts.flickrflow.domain.EmptyPhotosDbUseCase
-import com.gts.flickrflow.domain.SearchPhotoByLocationUseCase
+import com.gts.flickrflow.domain.usecase.EmptyPhotosDbUseCase
+import com.gts.flickrflow.domain.usecase.SearchPhotoByLocationUseCase
+import com.gts.flickrflow.presentation.MainActivity
+import com.gts.flickrflow.presentation.model.toPresentationModel
 
 import timber.log.Timber
 
@@ -222,7 +224,7 @@ class LocationService : Service() {
                 is Result.Success -> {
                     // Notify anyone listening for broadcasts about the new photo.
                     val intent = Intent(ACTION_BROADCAST)
-                    intent.putExtra(EXTRA_PHOTO, result.data)
+                    intent.putExtra(EXTRA_PHOTO, result.data.toPresentationModel())
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 }
                 is Result.Error -> Timber.tag(TAG).e(" LocationService error!")
