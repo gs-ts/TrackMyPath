@@ -31,6 +31,10 @@ android {
         pickFirst("META-INF/atomicfu.kotlin_module")
     }
 
+    viewBinding {
+        enabled = true
+    }
+
 }
 
 dependencies {

@@ -1,16 +1,18 @@
 package com.gts.flickrflow.presentation
 
-import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView
 
 import com.facebook.drawee.view.SimpleDraweeView
 
-import com.gts.flickrflow.R
+import com.gts.flickrflow.databinding.PhotoItemBinding
 import com.gts.flickrflow.presentation.model.PhotoViewItem
 
 class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+
+    private var _binding: PhotoItemBinding? = null
+    private val binding get() = _binding
 
     fun addPhoto(photo: PhotoViewItem) {
         // Add the photo at the beginning of the list
@@ -29,8 +31,8 @@ class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerVie
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): PhotoViewHolder {
-        val v = LayoutInflater.from(viewGroup.context).inflate(R.layout.photo_item, viewGroup, false)
-        return PhotoViewHolder(v)
+        _binding = PhotoItemBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        return PhotoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
@@ -45,9 +47,14 @@ class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerVie
         )
     }
 
+//    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+//        super.onDetachedFromRecyclerView(recyclerView)
+//        _binding = null // we actually need this part
+//    }
+
     override fun getItemCount(): Int = photos.size
 
-    class PhotoViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        var photoImageView: SimpleDraweeView = v.findViewById<View>(R.id.imageViewId) as SimpleDraweeView
+    class PhotoViewHolder(binding: PhotoItemBinding?) : RecyclerView.ViewHolder(binding!!.root) {
+        var photoImageView: SimpleDraweeView = binding?.imageViewId as SimpleDraweeView
     }
 }
