@@ -41,7 +41,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.FusedLocationProviderClient
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 import org.koin.android.ext.android.inject
 
@@ -257,6 +260,7 @@ class LocationService : Service() {
      *
      * @param context The [Context].
      */
+    @SuppressWarnings("deprecation")
     private fun serviceIsRunningInForeground(context: Context): Boolean {
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -272,6 +276,7 @@ class LocationService : Service() {
     /**
      * Returns the [NotificationCompat] used as part of the foreground service.
      */
+    @SuppressWarnings("deprecation")
     private fun getNotification(): Notification {
         val intent = Intent(this, LocationService::class.java)
         // Extra to help us figure out if we arrived in onStartCommand via the notification or not.
