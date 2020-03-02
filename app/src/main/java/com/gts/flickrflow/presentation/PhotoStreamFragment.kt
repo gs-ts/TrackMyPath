@@ -14,25 +14,27 @@ import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import java.util.ArrayList
 
 import com.google.android.material.snackbar.Snackbar
 
-import kotlinx.android.synthetic.main.fragment_photo_stream.*
-
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.gts.flickrflow.R
 import com.gts.flickrflow.BuildConfig
+import com.gts.flickrflow.databinding.FragmentPhotoStreamBinding
 import com.gts.flickrflow.presentation.model.PhotoViewItem
 import com.gts.flickrflow.presentation.service.LocationService
 
 import timber.log.Timber
 
 class PhotoStreamFragment : Fragment() {
+
+    companion object {
+        fun newInstance() = PhotoStreamFragment()
+    }
 
     private val viewModel: PhotoStreamViewModel by viewModel()
 
@@ -47,8 +49,9 @@ class PhotoStreamFragment : Fragment() {
     // used to store button state
     private lateinit var sharedPref: SharedPreferences
     // recycler view and adapter for retrieved photos
-    private lateinit var recyclerView: RecyclerView
     private lateinit var photoAdapter: PhotoAdapter
+
+    private lateinit var binding: FragmentPhotoStreamBinding
 
     // Monitors the state of the connection to the service.
     private val serviceConnection = object : ServiceConnection {
@@ -72,23 +75,26 @@ class PhotoStreamFragment : Fragment() {
         locationReceiver = LocationReceiver()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_photo_stream, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentPhotoStreamBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView = imageRecyclerView
         val photoList = ArrayList<PhotoViewItem>()
         photoAdapter = PhotoAdapter(photoList)
-        recyclerView.adapter = photoAdapter
-        recyclerView.isNestedScrollingEnabled = false
+        binding.imageRecyclerView.adapter = photoAdapter
+        binding.imageRecyclerView.isNestedScrollingEnabled = false
 
         viewModel.photosFromDb.observe(viewLifecycleOwner, Observer { photos ->
             photoAdapter.populate(photos)
-            recyclerView.smoothScrollToPosition(0)
+            binding.imageRecyclerView.smoothScrollToPosition(0)
         })
     }
 
@@ -98,11 +104,12 @@ class PhotoStreamFragment : Fragment() {
         photoAdapter.resetPhotoList()
         viewModel.retrievePhotosFromDb()
 
-        buttonStart.text = PreferenceManager.getDefaultSharedPreferences(context).getString(getString(R.string.service_state), "Start")
-        buttonStart.setOnClickListener {
-            if (buttonStart.text == getString(R.string.button_text_stop)) {
+        binding.buttonStart.text = PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(getString(R.string.service_state), "Start")
+        binding.buttonStart.setOnClickListener {
+            if (binding.buttonStart.text == getString(R.string.button_text_stop)) {
                 locationService?.removeLocationUpdates()
-                buttonStart.text = getString(R.string.button_text_start)
+                binding.buttonStart.text = getString(R.string.button_text_start)
             } else {
                 if (!checkPermissions()) {
                     requestPermissions()
@@ -110,7 +117,7 @@ class PhotoStreamFragment : Fragment() {
                     locationService?.requestLocationUpdates()
                 }
                 photoAdapter.resetPhotoList()
-                buttonStart.text = getString(R.string.button_text_stop)
+                binding.buttonStart.text = getString(R.string.button_text_stop)
             }
         }
 
@@ -125,14 +132,14 @@ class PhotoStreamFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        LocalBroadcastManager.getInstance(context!!).registerReceiver(
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             locationReceiver,
             IntentFilter(LocationService.ACTION_BROADCAST)
         )
     }
 
     override fun onPause() {
-        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(locationReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(locationReceiver)
         super.onPause()
     }
 
@@ -151,7 +158,7 @@ class PhotoStreamFragment : Fragment() {
      */
     private fun checkPermissions(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
-            context!!,
+            requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
@@ -166,7 +173,7 @@ class PhotoStreamFragment : Fragment() {
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
             Snackbar.make(
-                fragment_main,
+                binding.fragmentMain,
                 getString(R.string.location_permission_text),
                 Snackbar.LENGTH_INDEFINITE
             ).setAction(getString(R.string.location_permission_action_ok_text)) {
@@ -188,7 +195,11 @@ class PhotoStreamFragment : Fragment() {
     /**
      * Callback received when a permissions request has been completed.
      */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
                 grantResults.isEmpty() ->
@@ -198,7 +209,11 @@ class PhotoStreamFragment : Fragment() {
                     locationService?.requestLocationUpdates()
                 }
                 else -> // Permission denied.
-                    Snackbar.make(fragment_main, getString(R.string.location_permission_denied_text), Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(
+                        binding.fragmentMain,
+                        getString(R.string.location_permission_denied_text),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
                         .setAction(getString(R.string.location_permission_action_settings_text)) {
                             // Build intent that displays the App settings screen.
                             val intent = Intent()
@@ -212,10 +227,6 @@ class PhotoStreamFragment : Fragment() {
         }
     }
 
-    companion object {
-        fun newInstance() = PhotoStreamFragment()
-    }
-
     /**
      * Receiver for broadcasts sent by [LocationService].
      */
@@ -224,7 +235,7 @@ class PhotoStreamFragment : Fragment() {
             val photo = intent.getParcelableExtra<PhotoViewItem>(LocationService.EXTRA_PHOTO)
             if (photo != null) {
                 photoAdapter.addPhoto(photo)
-                recyclerView.smoothScrollToPosition(0)
+                binding.imageRecyclerView.smoothScrollToPosition(0)
             }
         }
     }
