@@ -103,7 +103,7 @@ private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
 // Step 2: Initialize/open an instance of EncryptedSharedPreferences
 private fun provideEncryptedSharedPreferences(applicationContext: Context) = EncryptedSharedPreferences.create(
-    "PreferencesFilename",
+    "appPreferences",
     masterKeyAlias,
     applicationContext,
     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
