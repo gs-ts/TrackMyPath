@@ -1,4 +1,4 @@
-# FlickrFlow
+# Track my path
 
 An android app that tracks your walk with images every 100 meters: 
 - images fetched from Flickr based on location 

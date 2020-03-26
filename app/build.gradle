@@ -7,7 +7,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.gts.flickrflow"
+        applicationId "com.gts.trackmypath"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1

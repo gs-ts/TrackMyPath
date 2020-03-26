@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">FlickrFlow</string>
+    <string name="app_name">Track my path</string>
     <string name="service_state">SERVICE_STATE</string>
-    <string name="notification_content_title">Flickr Flow</string>
+    <string name="notification_content_title">Track my path</string>
     <string name="notification_content_text">application is running</string>
     <string name="notification_action_launch">Launch app</string>
     <string name="notification_action_stop">Stop</string>

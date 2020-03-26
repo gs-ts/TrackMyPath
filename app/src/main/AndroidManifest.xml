@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.gts.flickrflow">
+          package="com.gts.trackmypath">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Required for foreground services on P+. -->
@@ -9,7 +9,7 @@
     <!--<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> needs specific debug manifest-->
 
     <application
-            android:name=".FlickrFlowApplication"
+            android:name="com.gts.trackmypath.TrackMyPathApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -18,12 +18,12 @@
             android:theme="@style/AppTheme"
             android:launchMode="singleTop">
         <service
-                android:name=".presentation.service.LocationService"
+                android:name="com.gts.trackmypath.presentation.service.LocationService"
                 android:enabled="true"
                 android:exported="false">
         </service>
 
-        <activity android:name=".presentation.MainActivity"
+        <activity android:name="com.gts.trackmypath.presentation.MainActivity"
         android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
