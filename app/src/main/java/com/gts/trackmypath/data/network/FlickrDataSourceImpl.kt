@@ -10,14 +10,18 @@ import timber.log.Timber
 class FlickrDataSourceImpl(private val flickrApi: FlickrApi) : FlickrDataSource {
 
     // request a photo from flickr service based on current location
-    override suspend fun searchPhoto(lat: String, lon: String, radius: String): Result<PhotoResponseEntity> {
+    override suspend fun searchPhoto(
+        lat: String,
+        lon: String,
+        radius: String
+    ): Result<List<PhotoResponseEntity>> {
         return try {
             val response = flickrApi.search(FlickrApi.API_KEY, lat, lon, radius)
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {
                     // return the first result from response
-                    return Result.Success(data.photosResponseEntity.list[0])
+                    return Result.Success(data.photosResponseEntity.list)
                 } else {
                     Timber.e("searchPhotoByLocation data error")
                     Result.Error(IOException("searchPhotoByLocation data error"))
