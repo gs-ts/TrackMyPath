@@ -32,16 +32,17 @@ class PhotoRepositoryImpl(
             return when (val response = flickrDataSource.searchPhoto(lat, lon, "0.1")) {
                 is Result.Success -> {
                     val photosFromDb = photoDao.selectAllPhotos()
-                    val photoFromFLickr = findUniquePhoto(response.data, photosFromDb)
-                    photoFromFLickr?.let {
+                    val photoFromFlickr = findUniquePhoto(response.data, photosFromDb)
+                    photoFromFlickr?.let {
                         // save it in the DB
-                        photoDao.insert(photoFromFLickr.toPhotoEntity())
-                        Result.Success(photoFromFLickr.toDomainModel())
+                        photoDao.insert(photoFromFlickr.toPhotoEntity())
+                        Result.Success(photoFromFlickr.toDomainModel())
                     } ?: throw IOException("no photos retrieved from flickr")
                 }
                 is Result.Error -> {
                     Result.Error(response.exception)
                 }
+                else -> Result.Error(Exception("unknown exception"))
             }
         } catch (e: Exception) {
             Timber.e(e, "searchPhotoByLocation exception")
