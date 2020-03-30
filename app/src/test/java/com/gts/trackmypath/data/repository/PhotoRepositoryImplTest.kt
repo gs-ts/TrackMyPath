@@ -29,12 +29,15 @@ class PhotoRepositoryImplTest {
     private val lat = "lat"
     private val lon = "lon"
     private val radius = "0.1"
-    private val id = "id"
+    private val id1 = "id1"
+    private val id2 = "id2"
     private val secret = "secret"
     private val server = "server"
     private val farm = "farm"
-    private val photoResponseEntity = PhotoResponseEntity(id, secret, server, farm)
-    private val photoEntity = photoResponseEntity.toPhotoEntity()
+    private val photoResponseEntity1 = PhotoResponseEntity(id1, secret, server, farm)
+    private val photoEntity1 = photoResponseEntity1.toPhotoEntity()
+    private val photoResponseEntity2 = PhotoResponseEntity(id2, secret, server, farm)
+    private val photoEntity2 = photoResponseEntity2.toPhotoEntity()
 
     @Before
     fun setUp() {
@@ -42,18 +45,38 @@ class PhotoRepositoryImplTest {
     }
 
     @Test
-    fun `given empty database, when searchPhotoByLocation, then success result with the first photo`() {
+    fun `given empty database, when searchPhotoByLocation, then return the first photo`() {
         runBlocking {
             val photosFromDb = arrayOf<PhotoEntity>()
             whenever(mockPhotoDatabase.selectAllPhotos()).thenReturn(photosFromDb)
-            val result = Result.Success(listOf(photoResponseEntity))
+
+            val photosFromFlickr = listOf(photoResponseEntity1)
+            val result = Result.Success(photosFromFlickr)
             whenever(mockFlickrDataSource.searchPhoto(lat, lon, radius)).thenReturn(result)
-            whenever(mockPhotoDatabase.insert(photoEntity)).thenReturn(Unit)
+            whenever(mockPhotoDatabase.insert(photoEntity1)).thenReturn(Unit)
 
             val test = repository.searchPhotoByLocation(lat, lon)
 
             verify(mockFlickrDataSource).searchPhoto(lat, lon, radius)
             Assert.assertEquals(test, Result.Success(result.data[0].toDomainModel()))
+        }
+    }
+
+    @Test
+    fun `given filled database, when searchPhotoByLocation returns existing photo, then return next photo`() {
+        runBlocking {
+            val photosFromDb = arrayOf<PhotoEntity>(photoEntity1)
+            whenever(mockPhotoDatabase.selectAllPhotos()).thenReturn(photosFromDb)
+
+            val photosFromFlickr = listOf(photoResponseEntity1, photoResponseEntity2)
+            val result = Result.Success(photosFromFlickr)
+            whenever(mockFlickrDataSource.searchPhoto(lat, lon, radius)).thenReturn(result)
+            whenever(mockPhotoDatabase.insert(photoEntity2)).thenReturn(Unit)
+
+            val test = repository.searchPhotoByLocation(lat, lon)
+
+            verify(mockFlickrDataSource).searchPhoto(lat, lon, radius)
+            Assert.assertEquals(test, Result.Success(result.data[1].toDomainModel()))
         }
     }
 
