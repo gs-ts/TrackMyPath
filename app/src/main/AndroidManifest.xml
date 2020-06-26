@@ -19,7 +19,8 @@
         <service
                 android:name="com.gts.trackmypath.presentation.service.LocationService"
                 android:enabled="true"
-                android:exported="false"></service>
+                android:exported="false">
+        </service>
 
         <activity
                 android:name="com.gts.trackmypath.presentation.MainActivity"
