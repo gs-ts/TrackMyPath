@@ -280,7 +280,6 @@ class LocationService : Service() {
     /**
      * Returns the [NotificationCompat] used as part of the foreground service.
      */
-    @SuppressWarnings("deprecation")
     private fun getNotification(): Notification {
         val intent = Intent(this, LocationService::class.java)
         // Extra to help us figure out if we arrived in onStartCommand via the notification or not.
@@ -294,7 +293,7 @@ class LocationService : Service() {
             this, 0, Intent(this, MainActivity::class.java), 0
         )
 
-        val builder = NotificationCompat.Builder(this)
+        val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .addAction(0, getString(R.string.notification_action_launch), activityPendingIntent)
             .addAction(0, getString(R.string.notification_action_stop), servicePendingIntent)
             .setContentTitle(getString(R.string.notification_content_title))
