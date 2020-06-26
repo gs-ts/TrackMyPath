@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.gts.trackmypath">
+        package="com.gts.trackmypath">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Required for foreground services on P+. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> needs specific debug manifest-->
 
     <application
@@ -15,20 +15,20 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTop">
+            android:theme="@style/AppTheme">
         <service
                 android:name="com.gts.trackmypath.presentation.service.LocationService"
                 android:enabled="true"
-                android:exported="false">
-        </service>
+                android:exported="false"></service>
 
-        <activity android:name="com.gts.trackmypath.presentation.MainActivity"
-        android:screenOrientation="portrait">
+        <activity
+                android:name="com.gts.trackmypath.presentation.MainActivity"
+                android:launchMode="singleTask"
+                android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
