@@ -16,14 +16,14 @@ import com.gts.trackmypath.data.database.PhotoDao
 import com.gts.trackmypath.data.database.PhotoEntity
 import com.gts.trackmypath.data.network.toDomainModel
 import com.gts.trackmypath.data.network.toPhotoEntity
-import com.gts.trackmypath.data.network.FlickrDataSource
+import com.gts.trackmypath.data.network.FlickrClient
 import com.gts.trackmypath.data.network.PhotoResponseEntity
 
 class PhotoRepositoryImplTest {
 
     private lateinit var repository: PhotoRepositoryImpl
 
-    private val mockFlickrDataSource: FlickrDataSource = mock()
+    private val mockFlickrClient: FlickrClient = mock()
     private val mockPhotoDatabase: PhotoDao = mock()
 
     private val lat = "lat"
@@ -41,7 +41,7 @@ class PhotoRepositoryImplTest {
 
     @Before
     fun setUp() {
-        repository = PhotoRepositoryImpl(mockFlickrDataSource, mockPhotoDatabase)
+        repository = PhotoRepositoryImpl(mockFlickrClient, mockPhotoDatabase)
     }
 
     @Test
@@ -52,12 +52,12 @@ class PhotoRepositoryImplTest {
 
             val photosFromFlickr = listOf(photoResponseEntity1)
             val result = Result.Success(photosFromFlickr)
-            whenever(mockFlickrDataSource.searchPhoto(lat, lon, radius)).thenReturn(result)
+            whenever(mockFlickrClient.searchPhoto(lat, lon, radius)).thenReturn(result)
             whenever(mockPhotoDatabase.insert(photoEntity1)).thenReturn(Unit)
 
             val test = repository.searchPhotoByLocation(lat, lon)
 
-            verify(mockFlickrDataSource).searchPhoto(lat, lon, radius)
+            verify(mockFlickrClient).searchPhoto(lat, lon, radius)
             Assert.assertEquals(test, Result.Success(result.data[0].toDomainModel()))
         }
     }
@@ -70,12 +70,12 @@ class PhotoRepositoryImplTest {
 
             val photosFromFlickr = listOf(photoResponseEntity1, photoResponseEntity2)
             val result = Result.Success(photosFromFlickr)
-            whenever(mockFlickrDataSource.searchPhoto(lat, lon, radius)).thenReturn(result)
+            whenever(mockFlickrClient.searchPhoto(lat, lon, radius)).thenReturn(result)
             whenever(mockPhotoDatabase.insert(photoEntity2)).thenReturn(Unit)
 
             val test = repository.searchPhotoByLocation(lat, lon)
 
-            verify(mockFlickrDataSource).searchPhoto(lat, lon, radius)
+            verify(mockFlickrClient).searchPhoto(lat, lon, radius)
             Assert.assertEquals(test, Result.Success(result.data[1].toDomainModel()))
         }
     }

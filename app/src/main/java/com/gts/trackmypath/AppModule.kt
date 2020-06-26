@@ -20,8 +20,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 import com.gts.trackmypath.data.network.FlickrApi
-import com.gts.trackmypath.data.network.FlickrDataSource
-import com.gts.trackmypath.data.network.FlickrDataSourceImpl
+import com.gts.trackmypath.data.network.FlickrClient
+import com.gts.trackmypath.data.network.FlickrClientImpl
 import com.gts.trackmypath.data.PhotoRepositoryImpl
 import com.gts.trackmypath.data.database.PhotoDatabase
 import com.gts.trackmypath.domain.PhotoRepository
@@ -40,13 +40,13 @@ val appModule = module {
     single { Room.databaseBuilder(androidApplication(), PhotoDatabase::class.java, "photo-db").build() }
     // Define single instance of PhotoDatabase
     single { get<PhotoDatabase>().photoDao() }
-    // Define single instance of type FlickrDataSource
+    // Define single instance of type FlickrClient
     // Resolve constructor dependencies with get(), here we need a flickrApi
-    single<FlickrDataSource> { FlickrDataSourceImpl(flickrApi = get()) }
+    single<FlickrClient> { FlickrClientImpl(flickrApi = get()) }
     // Define single instance of type PhotoRepository
     // Resolve constructor dependencies with get(), here we need a flickrApi and photoDao
     single<PhotoRepository> {
-        PhotoRepositoryImpl(flickrDataSource = get(), photoDao = get())
+        PhotoRepositoryImpl(flickrClient = get(), photoDao = get())
     }
     // Define single instance of SearchPhotoByLocationUseCase
     // Resolve constructor dependencies with get(), here we need a photoRepository

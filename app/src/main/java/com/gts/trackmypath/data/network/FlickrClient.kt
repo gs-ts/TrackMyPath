@@ -2,7 +2,7 @@ package com.gts.trackmypath.data.network
 
 import com.gts.trackmypath.common.Result
 
-interface FlickrDataSource {
+interface FlickrClient {
 
     suspend fun searchPhoto(
         lat: String,

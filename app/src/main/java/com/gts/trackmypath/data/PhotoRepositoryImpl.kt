@@ -12,7 +12,7 @@ import com.gts.trackmypath.data.database.PhotoEntity
 import com.gts.trackmypath.data.database.toDomainModel
 import com.gts.trackmypath.data.network.toDomainModel
 import com.gts.trackmypath.data.network.toPhotoEntity
-import com.gts.trackmypath.data.network.FlickrDataSource
+import com.gts.trackmypath.data.network.FlickrClient
 import com.gts.trackmypath.data.network.PhotoResponseEntity
 import com.gts.trackmypath.domain.model.Photo
 import com.gts.trackmypath.domain.PhotoRepository
@@ -20,7 +20,7 @@ import com.gts.trackmypath.domain.PhotoRepository
 import timber.log.Timber
 
 class PhotoRepositoryImpl(
-    private val flickrDataSource: FlickrDataSource,
+    private val flickrClient: FlickrClient,
     private val photoDao: PhotoDao
 ) : PhotoRepository {
 
@@ -29,9 +29,10 @@ class PhotoRepositoryImpl(
             // Radius used for geo queries, greater than zero and less than 20 miles (or 32 kilometers),
             // for use with point-based geo queries. The default value is 5 (km).
             // Set a radius of 100 meters. (default unit is km)
-            return when (val response = flickrDataSource.searchPhoto(lat, lon, "0.1")) {
+            return when (val response = flickrClient.searchPhoto(lat, lon, "0.1")) {
                 is Result.Success -> {
                     val photosFromDb = photoDao.selectAllPhotos()
+                    // if photo exists in DB, then take the next from the response
                     val photoFromFlickr = findUniquePhoto(response.data, photosFromDb)
                     photoFromFlickr?.let {
                         // save it in the DB
@@ -70,7 +71,6 @@ class PhotoRepositoryImpl(
         }
     }
 
-    // return the photo that doesn't already exist in the database
     private suspend fun findUniquePhoto(
         photosFromFlickr: List<PhotoResponseEntity>,
         photosFromDb: Array<PhotoEntity>

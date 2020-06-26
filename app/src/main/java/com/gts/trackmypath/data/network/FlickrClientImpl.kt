@@ -7,7 +7,7 @@ import com.gts.trackmypath.common.Result
 
 import timber.log.Timber
 
-class FlickrDataSourceImpl(private val flickrApi: FlickrApi) : FlickrDataSource {
+class FlickrClientImpl(private val flickrApi: FlickrApi) : FlickrClient {
 
     // request a photo from flickr service based on current location
     override suspend fun searchPhoto(
