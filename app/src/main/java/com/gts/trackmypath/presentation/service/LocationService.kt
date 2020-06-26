@@ -56,6 +56,7 @@ import com.gts.trackmypath.domain.usecase.SearchPhotoByLocationUseCase
 import com.gts.trackmypath.presentation.MainActivity
 import com.gts.trackmypath.presentation.model.toPresentationModel
 
+import java.util.concurrent.TimeUnit
 import timber.log.Timber
 
 /**
@@ -70,15 +71,20 @@ import timber.log.Timber
  */
 class LocationService : Service() {
 
-    private val TAG = LocationService::class.java.simpleName
-    // The name of the channel for notifications.
-    private val NOTIFICATION_CHANNEL_ID = "channel_01"
-    // The identifier for the notification displayed for the foreground service.
-    private val NOTIFICATION_ID = 1101
-    private val EXTRA_STARTED_FROM_NOTIFICATION = "started_from_notification"
+    companion object {
+        const val EXTRA_PHOTO = "location"
+        const val ACTION_BROADCAST = "broadcast"
+
+        private val TAG = LocationService::class.java.simpleName
+        // The name of the channel for notifications.
+        private const val NOTIFICATION_CHANNEL_ID = "channel_01"
+        // The identifier for the notification displayed for the foreground service.
+        private const val NOTIFICATION_ID = 1101
+        private const val EXTRA_STARTED_FROM_NOTIFICATION = "started_from_notification"
+    }
 
     private val binder = LocalBinder()
-    // Contains parameters used by [com.google.android.gms.location.FusedLocationProviderApi].
+    // A data object that contains quality of service parameters for requests
     private lateinit var locationRequest: LocationRequest
     // Provides access to the Fused Location Provider API.
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -243,11 +249,12 @@ class LocationService : Service() {
      * Sets the location request parameters.
      */
     private fun createLocationRequest() {
-        locationRequest = LocationRequest()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.smallestDisplacement = 100F // 100 meters
-        locationRequest.interval = 60000
-        locationRequest.fastestInterval = 60000 / 2
+        locationRequest = LocationRequest().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            smallestDisplacement = 100F // 100 meters
+            interval = TimeUnit.SECONDS.toMillis(60)
+            fastestInterval = TimeUnit.SECONDS.toMillis(30)
+        }
     }
 
     /**
@@ -321,8 +328,4 @@ class LocationService : Service() {
             .apply()
     }
 
-    companion object {
-        const val EXTRA_PHOTO = "location"
-        const val ACTION_BROADCAST = "broadcast"
-    }
 }
