@@ -1,12 +1,8 @@
 package com.gts.trackmypath
 
-import android.content.Context
 import androidx.room.Room
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 
 import org.koin.dsl.module
-import org.koin.core.qualifier.named
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.android.ext.koin.androidApplication
 
@@ -69,9 +65,6 @@ val appModule = module {
             photoRepository = get()
         )
     }
-    single(named("EncrSharedPrefs")) {
-        provideEncryptedSharedPreferences(applicationContext = androidApplication())
-    }
     // Define ViewModel and resolve constructor dependencies with get(),
     // here we need retrievePhotosFromDbUseCase
     viewModel { PhotoStreamViewModel(retrievePhotosFromDbUseCase = get()) }
@@ -97,15 +90,3 @@ private fun provideFlickrApi(): Retrofit {
         .client(okHttpClient)
         .build()
 }
-
-// Step 1: Create or retrieve the Master Key for encryption/decryption
-private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-
-// Step 2: Initialize/open an instance of EncryptedSharedPreferences
-private fun provideEncryptedSharedPreferences(applicationContext: Context) = EncryptedSharedPreferences.create(
-    "appPreferences",
-    masterKeyAlias,
-    applicationContext,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-)

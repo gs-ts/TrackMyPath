@@ -32,7 +32,7 @@ import android.content.Intent
 import android.content.Context
 import android.location.Location
 import androidx.core.app.NotificationCompat
-import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.preference.PreferenceManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import com.google.android.gms.location.LocationResult
@@ -46,7 +46,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-import org.koin.core.qualifier.named
 import org.koin.android.ext.android.inject
 
 import com.gts.trackmypath.R
@@ -95,7 +94,6 @@ class LocationService : Service() {
     private lateinit var location: Location
     private lateinit var notificationManager: NotificationManager
 
-    private val encryptedSharedPrefs: EncryptedSharedPreferences by inject(named("EncrSharedPrefs"))
     private val searchPhotoByLocationUseCase: SearchPhotoByLocationUseCase by inject()
     private val clearPhotosFromDbUseCase: ClearPhotosFromDbUseCase by inject()
     private val job = SupervisorJob()
@@ -323,7 +321,8 @@ class LocationService : Service() {
      * The UI retrieves the state to set the Button text.
      */
     private fun saveServiceState(state: String) {
-        encryptedSharedPrefs.edit()
+        PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            .edit()
             .putString(getString(R.string.service_state), state)
             .apply()
     }
