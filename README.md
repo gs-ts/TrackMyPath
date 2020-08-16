@@ -21,7 +21,6 @@ Clean architecture consists of three layers:
 - View Binding
 - LiveData 
 - Room
-- [EncryptedSharedPreferences](https://developer.android.com/reference/kotlin/androidx/security/crypto/EncryptedSharedPreferences)
 - [Location](https://github.com/googlesamples/android-play-location/tree/master/LocationUpdatesForegroundService)
 - [ActivityScenario](https://developer.android.com/guide/components/activities/testing), instrumentation testing (part of AndroidX Test) 
 - Espresso (UI tests)
