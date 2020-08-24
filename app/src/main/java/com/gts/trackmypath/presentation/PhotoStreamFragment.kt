@@ -49,9 +49,7 @@ class PhotoStreamFragment : Fragment() {
     // The BroadcastReceiver used to listen from broadcasts from the service.
     private lateinit var locationReceiver: LocationReceiver
     // A reference to the service used to get location updates.
-    private var locationService: LocationService? = null
-    // Tracks the bound state of the service.
-    private var serviceBound = false
+    private lateinit var locationService: LocationService
     // used to store button state
     private lateinit var sharedPref: SharedPreferences
     // recycler view and adapter for retrieved photos
@@ -63,14 +61,13 @@ class PhotoStreamFragment : Fragment() {
     private val serviceConnection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            Timber.d("ServiceConnection: onServiceConnected")
             val binder = service as LocationService.LocalBinder
             locationService = binder.service
-            serviceBound = true
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            locationService = null
-            serviceBound = false
+            Timber.d("ServiceConnection: onServiceDisconnected")
         }
     }
 
@@ -150,12 +147,9 @@ class PhotoStreamFragment : Fragment() {
     }
 
     override fun onStop() {
-        if (serviceBound) {
-            // Unbind from the service. This signals to the service that this activity is no longer in the foreground,
-            // and the service can respond by promoting itself to a foreground service.
-            requireActivity().unbindService(serviceConnection)
-            serviceBound = false
-        }
+        // Unbind from the service. This signals to the service that this activity is no longer in the foreground,
+        // and the service can respond by promoting itself to a foreground service.
+        requireActivity().unbindService(serviceConnection)
         super.onStop()
     }
 

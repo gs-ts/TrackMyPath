@@ -23,7 +23,6 @@ import android.os.IBinder
 import android.os.Handler
 import android.os.HandlerThread
 import android.app.ActivityManager
-import android.app.Service
 import android.app.PendingIntent
 import android.app.Notification
 import android.app.NotificationChannel
@@ -32,6 +31,7 @@ import android.content.Intent
 import android.content.Context
 import android.location.Location
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
 import androidx.preference.PreferenceManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
@@ -68,7 +68,7 @@ import timber.log.Timber
  * continue. When the activity comes back to the foreground, the foreground service stops, and the
  * notification assocaited with that service is removed.
  */
-class LocationService : Service() {
+class LocationService : LifecycleService() {
 
     companion object {
         const val EXTRA_PHOTO = "location"
@@ -100,6 +100,7 @@ class LocationService : Service() {
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
     override fun onCreate() {
+        super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationCallback = object : LocationCallback() {
@@ -128,23 +129,24 @@ class LocationService : Service() {
         }
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.tag(TAG).i("LocationService started")
-        val startedFromNotification = intent.getBooleanExtra(
+        val startedFromNotification = intent?.getBooleanExtra(
             EXTRA_STARTED_FROM_NOTIFICATION,
             false
         )
 
         // We got here because the user decided to remove location updates from the notification.
-        if (startedFromNotification) {
+        if (startedFromNotification!!) {
             removeLocationUpdates()
             stopSelf()
         }
         // Tells the system to not try to recreate the service after it has been killed.
-        return START_NOT_STICKY
+        return super.onStartCommand(intent, flags, START_NOT_STICKY)
     }
 
     override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
         // Called when a client (MainActivity in case of this sample) comes to the foreground and binds with this service.
         // The service should cease to be a foreground service when that happens.
         Timber.tag(TAG).i("in onBind()")
@@ -170,6 +172,7 @@ class LocationService : Service() {
     override fun onDestroy() {
         serviceHandler.removeCallbacksAndMessages(null)
         job.cancel()
+        super.onDestroy()
     }
 
     /**
