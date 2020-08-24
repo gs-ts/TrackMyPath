@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 
+import androidx.hilt.lifecycle.ViewModelInject
+
 import kotlinx.coroutines.launch
 
 import com.gts.trackmypath.common.Result
@@ -14,7 +16,7 @@ import com.gts.trackmypath.presentation.model.toPresentationModel
 
 import timber.log.Timber
 
-class PhotoStreamViewModel(
+class PhotoStreamViewModel @ViewModelInject constructor(
     private val retrievePhotosFromDbUseCase: RetrievePhotosFromDbUseCase
 ) : ViewModel() {
 

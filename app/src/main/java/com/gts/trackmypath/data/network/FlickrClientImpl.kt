@@ -6,8 +6,9 @@ import java.lang.Exception
 import com.gts.trackmypath.common.Result
 
 import timber.log.Timber
+import javax.inject.Inject
 
-class FlickrClientImpl(private val flickrApi: FlickrApi) : FlickrClient {
+class FlickrClientImpl @Inject constructor(private val flickrApi: FlickrApi) : FlickrClient {
 
     // request a photo from flickr service based on current location
     override suspend fun searchPhoto(

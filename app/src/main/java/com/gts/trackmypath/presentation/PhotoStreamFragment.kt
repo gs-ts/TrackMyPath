@@ -19,14 +19,15 @@ import android.provider.Settings
 import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+
+import dagger.hilt.android.AndroidEntryPoint
 
 import java.util.ArrayList
 
 import com.google.android.material.snackbar.Snackbar
-
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import com.gts.trackmypath.R
 import com.gts.trackmypath.BuildConfig
@@ -36,13 +37,14 @@ import com.gts.trackmypath.presentation.service.LocationService
 
 import timber.log.Timber
 
+@AndroidEntryPoint
 class PhotoStreamFragment : Fragment() {
 
     companion object {
         fun newInstance() = PhotoStreamFragment()
     }
 
-    private val viewModel: PhotoStreamViewModel by viewModel()
+    private val viewModel: PhotoStreamViewModel by viewModels()
 
     // Used in checking for runtime permissions.
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34

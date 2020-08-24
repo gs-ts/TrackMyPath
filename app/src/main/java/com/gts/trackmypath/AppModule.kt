@@ -1,10 +1,16 @@
 package com.gts.trackmypath
 
+import android.content.Context
 import androidx.room.Room
 
-import org.koin.dsl.module
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.android.ext.koin.androidApplication
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.components.ApplicationComponent
+
+import javax.inject.Qualifier
+import javax.inject.Singleton
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,84 +25,97 @@ import com.gts.trackmypath.data.network.FlickrApi
 import com.gts.trackmypath.data.network.FlickrClient
 import com.gts.trackmypath.data.network.FlickrClientImpl
 import com.gts.trackmypath.data.PhotoRepositoryImpl
+import com.gts.trackmypath.data.database.PhotoDao
 import com.gts.trackmypath.data.database.PhotoDatabase
-import com.gts.trackmypath.domain.LocationServiceInteractor
 import com.gts.trackmypath.domain.PhotoRepository
-import com.gts.trackmypath.domain.usecase.ClearPhotosFromDbUseCase
-import com.gts.trackmypath.domain.usecase.RetrievePhotosFromDbUseCase
-import com.gts.trackmypath.domain.usecase.SearchPhotoByLocationUseCase
-import com.gts.trackmypath.presentation.PhotoStreamViewModel
 
-// declare a module
-val appModule = module {
-    // Define single instance of Retrofit
-    single { provideFlickrApi().create(FlickrApi::class.java) }
-    // Define single instance of RoomDatabase.Builder
-    // RoomDatabase.Builder for a persistent database
-    // Once a database is built, you should keep a reference to it and re-use it
-    single { Room.databaseBuilder(androidApplication(), PhotoDatabase::class.java, "photo-db").build() }
-    // Define single instance of PhotoDatabase
-    single { get<PhotoDatabase>().photoDao() }
-    // Define single instance of type FlickrClient
-    // Resolve constructor dependencies with get(), here we need a flickrApi
-    single<FlickrClient> { FlickrClientImpl(flickrApi = get()) }
-    // Define single instance of type PhotoRepository
-    // Resolve constructor dependencies with get(), here we need a flickrApi and photoDao
-    single<PhotoRepository> {
-        PhotoRepositoryImpl(flickrClient = get(), photoDao = get())
+@Module
+@InstallIn(ApplicationComponent::class)
+object RepositoryModule {
+
+    @Singleton
+    @Provides
+    fun providePhotoRepository(
+        @AppModule.RemoteDataSource remoteDataSource: FlickrClient,
+        @AppModule.LocalDataSource localDataSource: PhotoDao
+    ): PhotoRepository {
+        return PhotoRepositoryImpl(remoteDataSource, localDataSource)
     }
-    // Define single instance of SearchPhotoByLocationUseCase
-    // Resolve constructor dependencies with get(), here we need a photoRepository
-    single {
-        SearchPhotoByLocationUseCase(
-            photoRepository = get()
-        )
-    }
-    // Define single instance of ClearPhotosFromDbUseCase
-    // Resolve constructor dependencies with get(), here we need a photoRepository
-    single {
-        ClearPhotosFromDbUseCase(
-            photoRepository = get()
-        )
-    }
-    // Define single instance of RetrievePhotosFromDbUseCase
-    // Resolve constructor dependencies with get(), here we need a photoRepository
-    single {
-        RetrievePhotosFromDbUseCase(
-            photoRepository = get()
-        )
-    }
-    // Define single instance of LocationServiceInteractor
-    // Resolve constructor dependencies with get(), here we need a ClearPhotosFromDbUseCase,
-    // and a SearchPhotoByLocationUseCase
-    single {
-        LocationServiceInteractor(
-            clearPhotosFromDbUseCase = get(),
-            searchPhotoByLocationUseCase = get()
-        )
-    }
-    // Define ViewModel and resolve constructor dependencies with get(),
-    // here we need retrievePhotosFromDbUseCase
-    viewModel { PhotoStreamViewModel(retrievePhotosFromDbUseCase = get()) }
 }
 
-private val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(run {
-        val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.apply {
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        }
-    })
-    .build()
+@Module
+@InstallIn(ApplicationComponent::class)
+object AppModule {
 
-private val jsonMoshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
-    .build()
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteDataSource
 
-private fun provideFlickrApi(): Retrofit {
-    return Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create(jsonMoshi))
-        .baseUrl("https://api.flickr.com/")
-        .client(okHttpClient)
-        .build()
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class LocalDataSource
+
+    @Singleton
+    @RemoteDataSource
+    @Provides
+    fun provideFlickrClient(
+        retrofit: Retrofit
+    ): FlickrClient {
+        return FlickrClientImpl(retrofit.create(FlickrApi::class.java) )
+    }
+
+    @Singleton
+    @LocalDataSource
+    @Provides
+    fun providePhotoDAO(photoDatabase: PhotoDatabase): PhotoDao {
+        return photoDatabase.photoDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providePhotoDatabase(@ApplicationContext context: Context): PhotoDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            PhotoDatabase::class.java,
+            "photos.db"
+        ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFlickrApi(
+        @HttpClient okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl("https://api.flickr.com/")
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class HttpClient
+
+    @HttpClient
+    @Provides
+    fun providerHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(run {
+                val httpLoggingInterceptor = HttpLoggingInterceptor()
+                httpLoggingInterceptor.apply {
+                    httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                }
+            })
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideJsonMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
 }

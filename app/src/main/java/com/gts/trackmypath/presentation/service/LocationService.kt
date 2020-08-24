@@ -35,6 +35,9 @@ import androidx.lifecycle.LifecycleService
 import androidx.preference.PreferenceManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
+import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
+
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -45,8 +48,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-import org.koin.android.ext.android.inject
 
 import com.gts.trackmypath.R
 import com.gts.trackmypath.common.Result
@@ -67,6 +68,7 @@ import timber.log.Timber
  * continue. When the activity comes back to the foreground, the foreground service stops, and the
  * notification assocaited with that service is removed.
  */
+@AndroidEntryPoint
 class LocationService : LifecycleService() {
 
     companion object {
@@ -93,7 +95,7 @@ class LocationService : LifecycleService() {
     private lateinit var location: Location
     private lateinit var notificationManager: NotificationManager
 
-    private val locationServiceInteractor: LocationServiceInteractor by inject()
+    @Inject lateinit var locationServiceInteractor: LocationServiceInteractor
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 

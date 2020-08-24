@@ -1,15 +1,13 @@
 package com.gts.trackmypath
 
 import android.app.Application
-import com.facebook.drawee.backends.pipeline.Fresco
+import dagger.hilt.android.HiltAndroidApp
 
-import org.koin.core.context.startKoin
-import org.koin.android.ext.koin.androidLogger
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.logger.Level
+import com.facebook.drawee.backends.pipeline.Fresco
 
 import timber.log.Timber
 
+@HiltAndroidApp
 class TrackMyPathApplication: Application() {
     override fun onCreate() {
         super.onCreate()
@@ -17,15 +15,6 @@ class TrackMyPathApplication: Application() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        }
-
-        startKoin {
-            // use AndroidLogger as Koin Logger - default Level.INFO
-            androidLogger(Level.ERROR) //TODO: remove Level.ERROR
-            // use the Android context given there
-            androidContext(this@TrackMyPathApplication)
-            // module list
-            modules(listOf(appModule))
         }
     }
 }
