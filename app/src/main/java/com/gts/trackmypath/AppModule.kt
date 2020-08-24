@@ -20,6 +20,7 @@ import com.gts.trackmypath.data.network.FlickrClient
 import com.gts.trackmypath.data.network.FlickrClientImpl
 import com.gts.trackmypath.data.PhotoRepositoryImpl
 import com.gts.trackmypath.data.database.PhotoDatabase
+import com.gts.trackmypath.domain.LocationServiceInteractor
 import com.gts.trackmypath.domain.PhotoRepository
 import com.gts.trackmypath.domain.usecase.ClearPhotosFromDbUseCase
 import com.gts.trackmypath.domain.usecase.RetrievePhotosFromDbUseCase
@@ -63,6 +64,15 @@ val appModule = module {
     single {
         RetrievePhotosFromDbUseCase(
             photoRepository = get()
+        )
+    }
+    // Define single instance of LocationServiceInteractor
+    // Resolve constructor dependencies with get(), here we need a ClearPhotosFromDbUseCase,
+    // and a SearchPhotoByLocationUseCase
+    single {
+        LocationServiceInteractor(
+            clearPhotosFromDbUseCase = get(),
+            searchPhotoByLocationUseCase = get()
         )
     }
     // Define ViewModel and resolve constructor dependencies with get(),

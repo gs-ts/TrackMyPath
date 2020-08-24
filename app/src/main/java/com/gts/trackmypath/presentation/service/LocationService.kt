@@ -50,8 +50,7 @@ import org.koin.android.ext.android.inject
 
 import com.gts.trackmypath.R
 import com.gts.trackmypath.common.Result
-import com.gts.trackmypath.domain.usecase.ClearPhotosFromDbUseCase
-import com.gts.trackmypath.domain.usecase.SearchPhotoByLocationUseCase
+import com.gts.trackmypath.domain.LocationServiceInteractor
 import com.gts.trackmypath.presentation.MainActivity
 import com.gts.trackmypath.presentation.model.toPresentationModel
 
@@ -94,8 +93,7 @@ class LocationService : LifecycleService() {
     private lateinit var location: Location
     private lateinit var notificationManager: NotificationManager
 
-    private val searchPhotoByLocationUseCase: SearchPhotoByLocationUseCase by inject()
-    private val clearPhotosFromDbUseCase: ClearPhotosFromDbUseCase by inject()
+    private val locationServiceInteractor: LocationServiceInteractor by inject()
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
@@ -156,7 +154,8 @@ class LocationService : LifecycleService() {
 
     override fun onRebind(intent: Intent) {
         // Called when a client (MainActivity in case of this sample) returns to the foreground and
-        // binds once again with this service. The service should cease to be a foreground service when that happens.
+        // binds once again with this service.
+        // The service should cease to be a foreground service when that happens.
         Timber.tag(TAG).i("in onRebind()")
         stopForeground(true)
         super.onRebind(intent)
@@ -187,7 +186,7 @@ class LocationService : LifecycleService() {
                 locationRequest, locationCallback, Looper.myLooper()
             )
             scope.launch {
-                clearPhotosFromDbUseCase.invoke()
+                locationServiceInteractor.clearPhotosFromList()
             }
         } catch (unlikely: SecurityException) {
             saveServiceState(getString(R.string.service_state_stopped))
@@ -229,7 +228,7 @@ class LocationService : LifecycleService() {
         this.location = location
 
         scope.launch {
-            when ( val result = searchPhotoByLocationUseCase.invoke(location.latitude, location.longitude)) {
+            when ( val result = locationServiceInteractor.getPhotoBasedOnLocation(location.latitude, location.longitude)) {
                 is Result.Success -> {
                     // Notify anyone listening for broadcasts about the new photo.
                     val intent = Intent(ACTION_BROADCAST)
