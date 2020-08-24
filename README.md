@@ -26,7 +26,8 @@ Clean architecture consists of three layers:
 - Espresso (UI tests)
 
 ##### Libraries:
-- [Koin](https://insert-koin.io/), an easy-to-use DI framework. [Nice comparison with Dagger](https://medium.com/@farshidabazari/android-koin-with-mvvm-and-retrofit-e040e4e15f9d)
+- [Koin](https://insert-koin.io/), (in [master branch](https://github.com/gs-ts/TrackMyPath)) an easy-to-use DI framework. [Nice comparison with Dagger](https://medium.com/@farshidabazari/android-koin-with-mvvm-and-retrofit-e040e4e15f9d)
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) (in feature-hilt-di branch) a DI library for Android based on Dagger
 - [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines)
 - [fresco](https://github.com/facebook/fresco), an Android library for managing images and the memory they use
 - [Retrofit](https://square.github.io/retrofit/)
