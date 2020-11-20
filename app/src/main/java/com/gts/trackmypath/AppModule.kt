@@ -22,8 +22,8 @@ import com.gts.trackmypath.data.PhotoRepositoryImpl
 import com.gts.trackmypath.data.database.PhotoDatabase
 import com.gts.trackmypath.domain.LocationServiceInteractor
 import com.gts.trackmypath.domain.PhotoRepository
-import com.gts.trackmypath.domain.usecase.ClearPhotosFromDbUseCase
-import com.gts.trackmypath.domain.usecase.RetrievePhotosFromDbUseCase
+import com.gts.trackmypath.domain.usecase.ClearPhotosUseCase
+import com.gts.trackmypath.domain.usecase.RetrievePhotosUseCase
 import com.gts.trackmypath.domain.usecase.SearchPhotoByLocationUseCase
 import com.gts.trackmypath.presentation.PhotoStreamViewModel
 
@@ -52,32 +52,32 @@ val appModule = module {
             photoRepository = get()
         )
     }
-    // Define single instance of ClearPhotosFromDbUseCase
+    // Define single instance of ClearPhotosUseCase
     // Resolve constructor dependencies with get(), here we need a photoRepository
     single {
-        ClearPhotosFromDbUseCase(
+        ClearPhotosUseCase(
             photoRepository = get()
         )
     }
-    // Define single instance of RetrievePhotosFromDbUseCase
+    // Define single instance of RetrievePhotosUseCase
     // Resolve constructor dependencies with get(), here we need a photoRepository
     single {
-        RetrievePhotosFromDbUseCase(
+        RetrievePhotosUseCase(
             photoRepository = get()
         )
     }
     // Define single instance of LocationServiceInteractor
-    // Resolve constructor dependencies with get(), here we need a ClearPhotosFromDbUseCase,
+    // Resolve constructor dependencies with get(), here we need a ClearPhotosUseCase,
     // and a SearchPhotoByLocationUseCase
     single {
         LocationServiceInteractor(
-            clearPhotosFromDbUseCase = get(),
+            clearPhotosUseCase = get(),
             searchPhotoByLocationUseCase = get()
         )
     }
     // Define ViewModel and resolve constructor dependencies with get(),
-    // here we need retrievePhotosFromDbUseCase
-    viewModel { PhotoStreamViewModel(retrievePhotosFromDbUseCase = get()) }
+    // here we need retrievePhotosUseCase
+    viewModel { PhotoStreamViewModel(retrievePhotosUseCase = get()) }
 }
 
 private val okHttpClient = OkHttpClient.Builder()

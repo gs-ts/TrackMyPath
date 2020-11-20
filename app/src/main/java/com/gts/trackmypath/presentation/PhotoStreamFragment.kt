@@ -95,7 +95,7 @@ class PhotoStreamFragment : Fragment() {
         binding.imageRecyclerView.adapter = photoAdapter
         binding.imageRecyclerView.isNestedScrollingEnabled = false
 
-        viewModel.photosFromDb.observe(viewLifecycleOwner, Observer { photos ->
+        viewModel.photosByLocation.observe(viewLifecycleOwner, Observer { photos ->
             photoAdapter.populate(photos)
             binding.imageRecyclerView.smoothScrollToPosition(0)
         })
@@ -105,7 +105,7 @@ class PhotoStreamFragment : Fragment() {
         super.onStart()
 
         photoAdapter.resetPhotoList()
-        viewModel.retrievePhotosFromDb()
+        viewModel.retrievePhotos()
 
         binding.buttonStart.text = PreferenceManager.getDefaultSharedPreferences(context)
             .getString(getString(R.string.service_state), "Start")

@@ -8,27 +8,27 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 import com.gts.trackmypath.common.Result
-import com.gts.trackmypath.domain.usecase.RetrievePhotosFromDbUseCase
+import com.gts.trackmypath.domain.usecase.RetrievePhotosUseCase
 import com.gts.trackmypath.presentation.model.PhotoViewItem
 import com.gts.trackmypath.presentation.model.toPresentationModel
 
 import timber.log.Timber
 
 class PhotoStreamViewModel(
-    private val retrievePhotosFromDbUseCase: RetrievePhotosFromDbUseCase
+    private val retrievePhotosUseCase: RetrievePhotosUseCase
 ) : ViewModel() {
 
-    private val _photosFromDb = MutableLiveData<List<PhotoViewItem>>()
-    val photosFromDb: LiveData<List<PhotoViewItem>>
-        get() = _photosFromDb
+    private val _photosByLocation = MutableLiveData<List<PhotoViewItem>>()
+    val photosByLocation: LiveData<List<PhotoViewItem>>
+        get() = _photosByLocation
 
-    fun retrievePhotosFromDb() {
+    fun retrievePhotos() {
         viewModelScope.launch {
-            when (val result = retrievePhotosFromDbUseCase.invoke()) {
+            when (val result = retrievePhotosUseCase.invoke()) {
                 is Result.Success -> {
-                    _photosFromDb.postValue(result.data.map { it.toPresentationModel() })
+                    _photosByLocation.postValue(result.data.map { it.toPresentationModel() })
                 }
-                is Result.Error -> Timber.d("no photos from DB")
+                is Result.Error -> Timber.d("no photos")
             }
         }
     }

@@ -20,8 +20,8 @@ class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerVie
         notifyItemInserted(0)
     }
 
-    fun populate(photosFromDb: List<PhotoViewItem>) {
-        photos.addAll(photosFromDb)
+    fun populate(photoItems: List<PhotoViewItem>) {
+        photos.addAll(photoItems)
         notifyDataSetChanged()
     }
 
