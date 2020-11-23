@@ -10,6 +10,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
@@ -28,6 +29,7 @@ class PhotoStreamViewModelTest {
     private lateinit var viewModel: PhotoStreamViewModel
     private val mockRetrievePhotosUseCase: RetrievePhotosUseCase = mock()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -35,7 +37,7 @@ class PhotoStreamViewModelTest {
     }
 
     @Test
-    fun retrievePhotos_sendsListOfPhotos() {
+    fun `given a photo, when view model retrieves photo, then returns a list with the photo item`() {
         val photo = Photo("id", "secret", "server", "farm")
         val expected = Result.Success(listOf(photo))
         runBlocking { whenever(mockRetrievePhotosUseCase.invoke()).thenReturn(expected) }
