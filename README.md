@@ -47,4 +47,4 @@ Sources:
 
 ### Screenshots
 
-![mtrack my path screenshot](/screenshots/scrn1.png)
+<img src="/screenshots/scrn1.png" width="260">
