@@ -9,7 +9,7 @@
             android:id="@+id/imageViewId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             app:viewAspectRatio="1" />
 
 </LinearLayout>
