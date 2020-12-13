@@ -27,7 +27,7 @@ class PhotoRepositoryImpl(
     override suspend fun searchPhotoByLocation(lat: String, lon: String): Result<Photo> {
         return try {
             // Radius used for geo queries, greater than zero and less than 20 miles (or 32 kilometers),
-            // for use with point-based geo queries. The default value is 5 (km).
+            // for use with point-based geo queries. The default value is 5 (km)!!!!!
             // Set a radius of 100 meters. (default unit is km)
             return when (val response = flickrClient.searchPhoto(lat, lon, "0.1")) {
                 is Result.Success -> {
