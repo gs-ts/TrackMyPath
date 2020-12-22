@@ -19,6 +19,7 @@ Clean architecture consists of three layers:
 ##### Android Jetpack Components used:
 - Fragment
 - ViewModel
+- [LifecycleService](https://developer.android.com/reference/androidx/lifecycle/LifecycleService)
 - View Binding
 - LiveData
 - Room
