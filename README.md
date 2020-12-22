@@ -4,6 +4,7 @@ An android app that tracks your walk with images every 100 meters:
 - images fetched from Flickr based on location 
 - pictures are shown in a list, and user can scroll through the stream
 - one button start/stop, on each start the previous stream of photos gets wiped
+- when the app is removed from background and user has not stopped the tracking, the tracking continues in a service
 
 *Please create a Flickr account and use your own api key. Add it in the FlickrService file.*
 
@@ -17,7 +18,8 @@ Clean architecture consists of three layers:
 
 ##### Android Jetpack Components used:
 - Fragment
-- ViewModel 
+- ViewModel
+- [LifecycleService](https://developer.android.com/reference/androidx/lifecycle/LifecycleService)
 - View Binding
 - LiveData 
 - Room
