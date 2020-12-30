@@ -16,7 +16,6 @@ import com.gts.trackmypath.data.database.PhotoDao
 import com.gts.trackmypath.data.database.PhotoEntity
 import com.gts.trackmypath.data.network.toDomainModel
 import com.gts.trackmypath.data.network.toPhotoEntity
-import com.gts.trackmypath.data.network.FlickrClient
 import com.gts.trackmypath.data.network.PhotoResponseEntity
 
 class PhotoRepositoryImplTest {

@@ -2,7 +2,7 @@ package com.gts.trackmypath.presentation.model
 
 import android.os.Parcelable
 
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 import com.gts.trackmypath.domain.model.Photo
 

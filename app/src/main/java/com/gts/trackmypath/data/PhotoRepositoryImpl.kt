@@ -2,6 +2,7 @@ package com.gts.trackmypath.data
 
 import java.io.IOException
 import java.lang.Exception
+import javax.inject.Inject
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,16 +11,16 @@ import com.gts.trackmypath.common.Result
 import com.gts.trackmypath.data.database.PhotoDao
 import com.gts.trackmypath.data.database.PhotoEntity
 import com.gts.trackmypath.data.database.toDomainModel
+import com.gts.trackmypath.data.network.FlickrClient
 import com.gts.trackmypath.data.network.toDomainModel
 import com.gts.trackmypath.data.network.toPhotoEntity
-import com.gts.trackmypath.data.network.FlickrClient
 import com.gts.trackmypath.data.network.PhotoResponseEntity
 import com.gts.trackmypath.domain.model.Photo
 import com.gts.trackmypath.domain.PhotoRepository
 
 import timber.log.Timber
 
-class PhotoRepositoryImpl(
+class PhotoRepositoryImpl @Inject constructor(
     private val flickrClient: FlickrClient,
     private val photoDao: PhotoDao
 ) : PhotoRepository {

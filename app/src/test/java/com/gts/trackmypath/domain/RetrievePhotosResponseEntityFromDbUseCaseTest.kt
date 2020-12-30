@@ -14,18 +14,18 @@ import com.nhaarman.mockitokotlin2.whenever
 
 import com.gts.trackmypath.common.Result
 import com.gts.trackmypath.domain.model.Photo
-import com.gts.trackmypath.domain.usecase.RetrievePhotosFromDbUseCase
+import com.gts.trackmypath.domain.usecase.RetrievePhotosUseCase
 
 class RetrievePhotosResponseEntityFromDbUseCaseTest {
 
-    private lateinit var retrievePhotosFromDbUseCase: RetrievePhotosFromDbUseCase
+    private lateinit var retrievePhotosUseCase: RetrievePhotosUseCase
     private val mockPhotoRepository: PhotoRepository = mock()
     private val photo = Photo("id", "secret", "server", "farm")
 
     @Before
     fun setUp() {
-        retrievePhotosFromDbUseCase =
-            RetrievePhotosFromDbUseCase(
+        retrievePhotosUseCase =
+            RetrievePhotosUseCase(
                 mockPhotoRepository
             )
     }
@@ -37,7 +37,7 @@ class RetrievePhotosResponseEntityFromDbUseCaseTest {
             val expected = Result.Success(listOf(photo))
             whenever(mockPhotoRepository.loadAllPhotos()).thenReturn(expected)
             // when
-            val result = retrievePhotosFromDbUseCase.invoke()
+            val result = retrievePhotosUseCase.invoke()
             // then
             verify(mockPhotoRepository).loadAllPhotos()
             assertEquals(expected, result)
@@ -51,7 +51,7 @@ class RetrievePhotosResponseEntityFromDbUseCaseTest {
             val expected = Result.Error(IOException("Failed to retrieve photos from database"))
             whenever(mockPhotoRepository.loadAllPhotos()).thenReturn(expected)
             // when
-            val result = retrievePhotosFromDbUseCase.invoke()
+            val result = retrievePhotosUseCase.invoke()
             // then
             verify(mockPhotoRepository).loadAllPhotos()
             assertEquals(expected, result)

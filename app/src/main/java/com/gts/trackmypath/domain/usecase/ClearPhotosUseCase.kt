@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 
 import com.gts.trackmypath.domain.PhotoRepository
 
-class ClearPhotosFromDbUseCase @Inject constructor(private val photoRepository: PhotoRepository) {
+class ClearPhotosUseCase @Inject constructor(private val photoRepository: PhotoRepository) {
 
     suspend operator fun invoke() = withContext(Dispatchers.IO) {
         photoRepository.deletePhotos()

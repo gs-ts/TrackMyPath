@@ -9,6 +9,7 @@ import timber.log.Timber
 
 @HiltAndroidApp
 class TrackMyPathApplication: Application() {
+
     override fun onCreate() {
         super.onCreate()
         Fresco.initialize(this)

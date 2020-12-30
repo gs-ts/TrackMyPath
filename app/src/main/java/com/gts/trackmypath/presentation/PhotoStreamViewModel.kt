@@ -10,14 +10,14 @@ import androidx.hilt.lifecycle.ViewModelInject
 import kotlinx.coroutines.launch
 
 import com.gts.trackmypath.common.Result
-import com.gts.trackmypath.domain.usecase.RetrievePhotosFromDbUseCase
+import com.gts.trackmypath.domain.usecase.RetrievePhotosUseCase
 import com.gts.trackmypath.presentation.model.PhotoViewItem
 import com.gts.trackmypath.presentation.model.toPresentationModel
 
 import timber.log.Timber
 
 class PhotoStreamViewModel @ViewModelInject constructor(
-    private val retrievePhotosFromDbUseCase: RetrievePhotosFromDbUseCase
+    private val retrievePhotosUseCase: RetrievePhotosUseCase
 ) : ViewModel() {
 
     private val _photosFromDb = MutableLiveData<List<PhotoViewItem>>()
@@ -26,7 +26,7 @@ class PhotoStreamViewModel @ViewModelInject constructor(
 
     fun retrievePhotosFromDb() {
         viewModelScope.launch {
-            when (val result = retrievePhotosFromDbUseCase.invoke()) {
+            when (val result = retrievePhotosUseCase.invoke()) {
                 is Result.Success -> {
                     _photosFromDb.postValue(result.data.map { it.toPresentationModel() })
                 }
