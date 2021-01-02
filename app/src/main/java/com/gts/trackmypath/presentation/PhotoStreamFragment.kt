@@ -84,7 +84,7 @@ class PhotoStreamFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPhotoStreamBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -97,7 +97,7 @@ class PhotoStreamFragment : Fragment() {
         binding.imageRecyclerView.adapter = photoAdapter
         binding.imageRecyclerView.isNestedScrollingEnabled = false
 
-        viewModel.photosFromDb.observe(viewLifecycleOwner, Observer { photos ->
+        viewModel.photosFromDb.observe(viewLifecycleOwner, { photos ->
             photoAdapter.populate(photos)
             binding.imageRecyclerView.smoothScrollToPosition(0)
         })
@@ -113,13 +113,13 @@ class PhotoStreamFragment : Fragment() {
             .getString(getString(R.string.service_state), "Start")
         binding.buttonStart.setOnClickListener {
             if (binding.buttonStart.text == getString(R.string.button_text_stop)) {
-                locationService?.removeLocationUpdates()
+                locationService.removeLocationUpdates()
                 binding.buttonStart.text = getString(R.string.button_text_start)
             } else {
                 if (!checkPermissions()) {
                     requestPermissions()
                 } else {
-                    locationService?.requestLocationUpdates()
+                    locationService.requestLocationUpdates()
                 }
                 photoAdapter.resetPhotoList()
                 binding.buttonStart.text = getString(R.string.button_text_stop)
@@ -208,7 +208,7 @@ class PhotoStreamFragment : Fragment() {
                     // If user interaction was interrupted, the permission request is cancelled and you receive empty arrays.
                     Timber.i("=======> User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
-                    locationService?.requestLocationUpdates()
+                    locationService.requestLocationUpdates()
                 }
                 else -> // Permission denied.
                     Snackbar.make(
