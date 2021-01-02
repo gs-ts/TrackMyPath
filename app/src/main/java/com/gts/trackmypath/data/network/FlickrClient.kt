@@ -3,14 +3,15 @@ package com.gts.trackmypath.data.network
 import java.io.IOException
 import java.lang.Exception
 
+import javax.inject.Inject
+
 import com.gts.trackmypath.common.Result
 
 import timber.log.Timber
 
-class FlickrClient (private val flickrApi: FlickrApi) {
+class FlickrClient @Inject constructor(private val flickrApi: FlickrApi) {
 
     // request a photo from flickr service based on current location
-//    override suspend fun searchPhoto(
     suspend fun searchPhoto(
         lat: String,
         lon: String,

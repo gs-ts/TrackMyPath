@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 
 import dagger.Module
-import dagger.Binds
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -65,14 +64,14 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun providePhotoDatabase(@ApplicationContext context: Context): PhotoDatabase {
-        return Room.databaseBuilder(context, PhotoDatabase::class.java, "photos.db").build()
+    fun provideFlickrApi(retrofit: Retrofit) : FlickrApi {
+        return retrofit.create(FlickrApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideFlickrClient(retrofit: Retrofit): FlickrClient {
-        return FlickrClient(retrofit.create(FlickrApi::class.java) )
+    fun providePhotoDatabase(@ApplicationContext context: Context): PhotoDatabase {
+        return Room.databaseBuilder(context, PhotoDatabase::class.java, "photos.db").build()
     }
 
     @Provides
@@ -84,12 +83,11 @@ object DataModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class PhotoRepositoryModule {
+object PhotoRepositoryModule {
 
-    // https://developer.android.com/training/dependency-injection/hilt-android#component-scopes
+    @Provides
     @Singleton
-    @Binds
-    abstract fun bindPhotoRepository(
-        photoRepositoryImpl: PhotoRepositoryImpl
-    ): PhotoRepository
+    fun providePhotoRepository(flickrClient: FlickrClient, photoDao: PhotoDao): PhotoRepository {
+        return PhotoRepositoryImpl(flickrClient, photoDao)
+    }
 }
