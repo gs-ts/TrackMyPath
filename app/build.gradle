@@ -35,11 +35,6 @@ android {
     buildFeatures{
         viewBinding = true
     }
-
-    kapt {
-        correctErrorTypes true // https://kotlinlang.org/docs/reference/kapt.html#non-existent-type-correction
-    }
-
 }
 
 dependencies {
@@ -94,4 +89,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation  "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+}
+
+kapt {
+    correctErrorTypes true // https://kotlinlang.org/docs/reference/kapt.html#non-existent-type-correction
 }
