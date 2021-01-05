@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.provider.Settings
-import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
