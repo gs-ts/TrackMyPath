@@ -1,4 +1,4 @@
-<img src="/screenshots/summary.png" width="300">
+<img src="/screenshots/summary.png" width="600">
 
 # Track my path
 
