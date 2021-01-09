@@ -74,21 +74,31 @@ class LocationService : LifecycleService() {
         const val ACTION_BROADCAST = "broadcast"
 
         private val TAG = LocationService::class.java.simpleName
+
         // The name of the channel for notifications.
         private const val NOTIFICATION_CHANNEL_ID = "channel_01"
+
         // The identifier for the notification displayed for the foreground service.
         private const val NOTIFICATION_ID = 1101
         private const val EXTRA_STARTED_FROM_NOTIFICATION = "started_from_notification"
+
+        private const val SMALLEST_DISPLACEMENT_100_METERS = 100F
+        private const val INTERVAL_TIME = 60
+        private const val FASTEST_INTERVAL_TIME = 30
     }
 
     private val binder = LocalBinder()
+
     // A data object that contains quality of service parameters for requests
     private lateinit var locationRequest: LocationRequest
+
     // Provides access to the Fused Location Provider API.
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     // Callback for changes in location.
     private lateinit var locationCallback: LocationCallback
     private lateinit var serviceHandler: Handler
+
     // The current location.
     private lateinit var location: Location
     private lateinit var notificationManager: NotificationManager
@@ -120,7 +130,11 @@ class LocationService : LifecycleService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(R.string.app_name)
             // Create the channel for the notification
-            val mChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT)
+            val mChannel = NotificationChannel(
+                NOTIFICATION_CHANNEL_ID,
+                name,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
 
             // Set the Notification Channel for the Notification Manager.
             notificationManager.createNotificationChannel(mChannel)
@@ -143,9 +157,10 @@ class LocationService : LifecycleService() {
         return super.onStartCommand(intent, flags, START_NOT_STICKY)
     }
 
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent): IBinder {
         super.onBind(intent)
-        // Called when a client (MainActivity in case of this sample) comes to the foreground and binds with this service.
+        // Called when a client (MainActivity in case of this app) comes to the foreground
+        // and binds with this service.
         // The service should cease to be a foreground service when that happens.
         Timber.tag(TAG).i("in onBind()")
         stopForeground(true)
@@ -228,7 +243,10 @@ class LocationService : LifecycleService() {
         this.location = location
 
         scope.launch {
-            when ( val result = locationServiceInteractor.getPhotoBasedOnLocation(location.latitude, location.longitude)) {
+            when (val result = locationServiceInteractor.getPhotoBasedOnLocation(
+                location.latitude, location.longitude
+            )
+            ) {
                 is Result.Success -> {
                     // Notify anyone listening for broadcasts about the new photo.
                     val intent = Intent(ACTION_BROADCAST)
@@ -251,9 +269,9 @@ class LocationService : LifecycleService() {
     private fun createLocationRequest() {
         locationRequest = LocationRequest().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            smallestDisplacement = 100F // 100 meters
-            interval = TimeUnit.SECONDS.toMillis(60)
-            fastestInterval = TimeUnit.SECONDS.toMillis(30)
+            smallestDisplacement = SMALLEST_DISPLACEMENT_100_METERS // 100 meters
+            interval = TimeUnit.SECONDS.toMillis(INTERVAL_TIME.toLong())
+            fastestInterval = TimeUnit.SECONDS.toMillis(FASTEST_INTERVAL_TIME.toLong())
         }
     }
 

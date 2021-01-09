@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 android {
     compileSdkVersion 30
@@ -27,7 +28,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 

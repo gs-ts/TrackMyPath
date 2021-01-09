@@ -10,7 +10,7 @@ import org.koin.core.logger.Level
 
 import timber.log.Timber
 
-class TrackMyPathApplication: Application() {
+class TrackMyPathApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Fresco.initialize(this)

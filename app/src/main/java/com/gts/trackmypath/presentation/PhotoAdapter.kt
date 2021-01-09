@@ -9,7 +9,8 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.gts.trackmypath.databinding.PhotoItemBinding
 import com.gts.trackmypath.presentation.model.PhotoViewItem
 
-class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) :
+    RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
     private var _binding: PhotoItemBinding? = null
     private val binding get() = _binding
@@ -31,7 +32,8 @@ class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerVie
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): PhotoViewHolder {
-        _binding = PhotoItemBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        _binding =
+            PhotoItemBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return PhotoViewHolder(binding)
     }
 

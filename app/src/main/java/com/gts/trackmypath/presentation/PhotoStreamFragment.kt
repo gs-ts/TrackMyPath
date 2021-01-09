@@ -40,18 +40,22 @@ class PhotoStreamFragment : Fragment() {
 
     companion object {
         fun newInstance() = PhotoStreamFragment()
+
+        // Used in checking for runtime permissions.
+        private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     }
 
     private val viewModel: PhotoStreamViewModel by viewModel()
 
-    // Used in checking for runtime permissions.
-    private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     // The BroadcastReceiver used to listen from broadcasts from the service.
     private lateinit var locationReceiver: LocationReceiver
+
     // A reference to the service used to get location updates.
     private lateinit var locationService: LocationService
+
     // used to store button state
     private lateinit var sharedPref: SharedPreferences
+
     // recycler view and adapter for retrieved photos
     private lateinit var photoAdapter: PhotoAdapter
 
@@ -111,13 +115,13 @@ class PhotoStreamFragment : Fragment() {
             .getString(getString(R.string.service_state), "Start")
         binding.buttonStart.setOnClickListener {
             if (binding.buttonStart.text == getString(R.string.button_text_stop)) {
-                locationService?.removeLocationUpdates()
+                locationService.removeLocationUpdates()
                 binding.buttonStart.text = getString(R.string.button_text_start)
             } else {
                 if (!checkPermissions()) {
                     requestPermissions()
                 } else {
-                    locationService?.requestLocationUpdates()
+                    locationService.requestLocationUpdates()
                 }
                 photoAdapter.resetPhotoList()
                 binding.buttonStart.text = getString(R.string.button_text_stop)
@@ -203,10 +207,11 @@ class PhotoStreamFragment : Fragment() {
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
                 grantResults.isEmpty() ->
-                    // If user interaction was interrupted, the permission request is cancelled and you receive empty arrays.
+                    // If user interaction was interrupted, the permission request is cancelled
+                    // and you receive empty arrays.
                     Timber.i("=======> User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
-                    locationService?.requestLocationUpdates()
+                    locationService.requestLocationUpdates()
                 }
                 else -> // Permission denied.
                     Snackbar.make(
