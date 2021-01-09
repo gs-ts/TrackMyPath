@@ -1,3 +1,5 @@
+<img src="/screenshots/summary.png" width="300">
+
 # Track my path
 
 An android app that tracks your walk with images every 100 meters: 
