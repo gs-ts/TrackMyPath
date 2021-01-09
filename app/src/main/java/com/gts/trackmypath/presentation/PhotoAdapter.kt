@@ -9,7 +9,8 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.gts.trackmypath.databinding.PhotoItemBinding
 import com.gts.trackmypath.presentation.model.PhotoViewItem
 
-class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+class PhotoAdapter(private val photos: MutableList<PhotoViewItem>) :
+    RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
     private var _binding: PhotoItemBinding? = null
     private val binding get() = _binding
