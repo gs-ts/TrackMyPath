@@ -32,7 +32,7 @@ jobs:
 
       # Execute Android Lint
       - name: Android Lint
-        if: github.ref != 'refs/head/master'
+        if: ${{ github.event_name == 'pull_request'}}
         run: ./gradlew lintDebug
 
       # Execute unit tests
