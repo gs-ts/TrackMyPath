@@ -40,12 +40,16 @@ class PhotoStreamViewModelTest {
     fun `given a photo, when view model retrieves photo, then returns a list with the photo item`() {
         val photo = Photo("id", "secret", "server", "farm")
         val expected = Result.Success(listOf(photo))
-        runBlocking { whenever(mockRetrievePhotosUseCase.invoke()).thenReturn(expected) }
-        // when
-        viewModel.retrievePhotos()
-        // then
-        val photoList: List<PhotoViewItem>? = LiveDataTestUtil.getValue(viewModel.photosByLocation)
-        Assert.assertNotNull(photoList)
-        Assert.assertEquals(expected.data.map { it.toPresentationModel() }, photoList)
+
+        runBlocking {
+            whenever(mockRetrievePhotosUseCase.invoke()).thenReturn(expected)
+
+            viewModel.retrievePhotos()
+
+            val photoList: List<PhotoViewItem>? =
+                LiveDataTestUtil.getValue(viewModel.photosByLocation)
+            Assert.assertNotNull(photoList)
+            Assert.assertEquals(expected.data.map { it.toPresentationModel() }, photoList)
+        }
     }
 }
