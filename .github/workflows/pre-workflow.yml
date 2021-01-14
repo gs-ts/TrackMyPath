@@ -31,7 +31,7 @@ jobs:
 #          java-version: 1.8
 
       - name: Cache Gradle Caches
-        uses: actions/cache@v2
+        uses: actions/cache@v1
         with:
          path: ~/.gradle/caches/
          key: cache-gradle-cache
