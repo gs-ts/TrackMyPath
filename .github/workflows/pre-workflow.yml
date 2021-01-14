@@ -33,8 +33,10 @@ jobs:
       - name: Cache Gradle Caches
         uses: actions/cache@v1
         with:
-         path: ~/.gradle/caches/
-         key: cache-gradle-cache
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       # Execute Android Lint
       - name: Android Lint
