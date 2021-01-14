@@ -30,6 +30,11 @@ jobs:
         with:
           java-version: 1.8
 
+      # Execute Android Lint
+      - name: Android Lint
+        if: github.ref != 'refs/head/master'
+        run: ./gradlew lintDebug
+
       # Execute unit tests
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
